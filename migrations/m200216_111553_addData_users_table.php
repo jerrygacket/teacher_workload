@@ -12,7 +12,12 @@ class m200216_111553_addData_users_table extends Migration
      */
     public function safeUp()
     {
-
+        $this->batchInsert('{{%users}}',[
+            'surname', 'name', 'middleName', 'username', 'email', 'active', 'passwordHash',
+        ],[
+            ['Иванов','Иван','Иванович','admin','admin@example.com',true,\Yii::$app->security->generatePasswordHash('123456')],
+            ['Петрров','Петр','Петрович','ПетровПП','petrov@example.com',true,\Yii::$app->security->generatePasswordHash('123456')],
+        ]);
     }
 
     /**
@@ -20,9 +25,7 @@ class m200216_111553_addData_users_table extends Migration
      */
     public function safeDown()
     {
-        echo "m200216_111553_addData_users_table cannot be reverted.\n";
-
-        return false;
+        $this->delete('{{%users}}');
     }
 
     /*
