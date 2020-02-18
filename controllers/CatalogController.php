@@ -30,6 +30,16 @@ class CatalogController extends BaseController
             Yii::$app->db->createCommand()->insert($tableName, ['name' => $data])->execute();
         }
 
-        //$this->actionIndex();
+        return $this->redirect('/catalog');
+    }
+
+    public function actionDelete() {
+        $tableName = Yii::$app->request->getBodyParam('table', null);
+        $data = Yii::$app->request->getBodyParam('name', null);
+        if (Yii::$app->request->isPost && $tableName && $data && Yii::$app->db->schema->getTableSchema($tableName)) {
+            Yii::$app->db->createCommand()->delete($tableName, ['name' => $data])->execute();
+        }
+
+        return $this->redirect('/catalog');
     }
 }

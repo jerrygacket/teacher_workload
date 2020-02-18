@@ -16,30 +16,29 @@ $this->title = 'My Yii Application';
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-md-3 col-12">
+                <h2>Справочники</h2>
+
+                <p>Описание (кратко)</p>
+                <p><a class="btn peach-gradient" href="/catalog">Посмотреть</a></p>
+            </div>
+            <div class="col-md-3 col-12">
                 <h2>Институты</h2>
 
                 <p>Институты</p>
-                <p><a class="btn btn-success" href="#">Добавить</a></p>
+                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
             </div>
-            <div class="col-lg-3">
+            <div class="col-md-3 col-12">
                 <h2>Кафедры</h2>
 
                 <p>Кафедры</p>
-                <p><a class="btn btn-success" href="#">Добавить</a></p>
+                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
             </div>
-            <div class="col-lg-3">
-                <h2>Занятия</h2>
+            <div class="col-md-3 col-12">
+                <h2>Пользователи</h2>
 
-                <p>Лекции, лабы и т.д.</p>
-
-                <p><a class="btn btn-success" href="#">Добавить</a></p>
-            </div>
-            <div class="col-lg-3">
-                <h2>Институты</h2>
-
-                <p>Институты</p>
-                <p><a class="btn btn-success" href="#">Добавить</a></p>
+                <p>Пользователи</p>
+                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
             </div>
         </div>
 
