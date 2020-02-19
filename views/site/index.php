@@ -26,19 +26,19 @@ $this->title = 'My Yii Application';
                 <h2>Институты</h2>
 
                 <p>Институты</p>
-                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
+                <p><a class="btn peach-gradient" href="/institutes">Посмотреть</a></p>
             </div>
             <div class="col-md-3 col-12">
                 <h2>Кафедры</h2>
 
                 <p>Кафедры</p>
-                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
+                <p><a class="btn peach-gradient" href="/departments">Посмотреть</a></p>
             </div>
             <div class="col-md-3 col-12">
                 <h2>Пользователи</h2>
 
                 <p>Пользователи</p>
-                <p><a class="btn peach-gradient" href="#">Посмотреть</a></p>
+                <p><a class="btn peach-gradient" href="/users">Посмотреть</a></p>
             </div>
         </div>
 

@@ -21,27 +21,6 @@ class Institutes extends BaseInstitutes
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
-        return 'institutes';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['fullName'], 'string'],
-            [['headId'], 'integer'],
-            [['name'], 'string', 'max' => 256],
-            [['headId'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['headId' => 'id']],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -49,6 +28,7 @@ class Institutes extends BaseInstitutes
             'name' => Yii::t('app', 'Name'),
             'fullName' => Yii::t('app', 'Full Name'),
             'headId' => Yii::t('app', 'Head ID'),
+            'head' => Yii::t('app', 'Head'),
         ];
     }
 
@@ -63,12 +43,11 @@ class Institutes extends BaseInstitutes
     }
 
     /**
-     * Gets query for [[Head]].
-     *
-     * @return \yii\db\ActiveQuery
+     * @return string|\yii\db\ActiveQuery
      */
     public function getHead()
     {
-        return $this->headId ? $this->hasOne(Users::className(), ['id' => 'headId']) : null;
+        $user = $this->headId ? $this->hasOne(Users::className(), ['id' => 'headId'])->asArray() : null;
+        return $user ? $user['surname'].' '.$user['name'].' '.$user['middleName'] : '';
     }
 }
