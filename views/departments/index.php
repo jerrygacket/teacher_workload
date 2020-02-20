@@ -5,8 +5,10 @@
  *
  */
 
-use yii\helpers\Html; ?>
-<?= Html::a('Создать кафедру', '/departments/create', ['class' => 'btn blue-gradient']) ?>
+use yii\helpers\Html;
+$cancelButton = Html::a('Создать кафедру', '/departments/edit', ['class' => 'btn blue-gradient']);
+?>
+<?= $cancelButton ?>
 <?=\yii\grid\GridView::widget([
     'dataProvider' => $provider,
     'columns' => [
@@ -24,7 +26,13 @@ use yii\helpers\Html; ?>
                     return Html::a('<i class="fas fa-edit"></i>', $url);
                 },
                 'delete' => function ($url, $model, $key) {
-                    return Html::a('<i class="fas fa-times" style="color:red"></i>', $url);
+                    return Html::a('<i class="fas fa-times" style="color:red"></i>', $url,[
+                        'onclick' => 'if(confirm("Хотите удалить?")){
+                                         return true;
+                                        }else{
+                                         return false;
+                                        }',
+                    ]);
                 },
             ]
         ],
@@ -55,4 +63,4 @@ use yii\helpers\Html; ?>
     ],
 ])
 ?>
-<?= Html::a('Создать кафедру', '/departments/create', ['class' => 'btn blue-gradient']) ?>
+<?= $cancelButton ?>

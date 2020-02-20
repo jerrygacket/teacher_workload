@@ -2,6 +2,8 @@
 
 namespace app\models\base;
 
+use app\models\Institutes;
+use app\models\Users;
 use Yii;
 
 /**

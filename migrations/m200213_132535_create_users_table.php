@@ -29,6 +29,10 @@ class m200213_132535_create_users_table extends Migration
             'rateId'=>$this->integer(3)->defaultValue(null),
             'occupationId'=>$this->integer(3)->defaultValue(null),
             'departmentId'=>$this->integer(3)->defaultValue(null),
+//            'teacher'=>$this->boolean()->defaultValue(false),
+//            'top'=>$this->boolean()->defaultValue(false),
+//            'shortName' => $this->string(256),
+//            'fullName' => $this->string(1024),
             'created_on'=>$this->timestamp()->notNull()
                 ->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_on'=>$this->timestamp()->notNull()

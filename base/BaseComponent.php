@@ -29,7 +29,7 @@ class BaseComponent extends Component
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 100
+                'pageSize' => 100,
             ],
             'sort' => [
                 'defaultOrder' => [
@@ -39,5 +39,11 @@ class BaseComponent extends Component
         ]);
 
         return $provider;
+    }
+
+    public function getModel($params = []) {
+        $model = new $this->nameClass;
+
+        return empty($params['id']) ? $model : $model::findOne(['id'=>$params['id']]);
     }
 }

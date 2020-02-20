@@ -17,14 +17,20 @@ use yii\helpers\Html; ?>
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
-            'template' => '{view}&nbsp;&nbsp; {create} &nbsp;&nbsp; {delete}',
-            'controller' => 'Institutes',
+            'template' => '{edit} &nbsp;&nbsp; {delete}',
+            'controller' => 'Users',
             'buttons' => [
                 'edit' => function ($url, $model, $key) {
                     return Html::a('<i class="fas fa-edit"></i>', $url);
                 },
                 'delete' => function ($url, $model, $key) {
-                    return Html::a('<i class="fas fa-times" style="color:red"></i>', $url);
+                    return Html::a('<i class="fas fa-times" style="color:red"></i>', $url,[
+                        'onclick' => 'if(confirm("Хотите удалить?")){
+                                         return true;
+                                        }else{
+                                         return false;
+                                        }',
+                    ]);
                 },
             ]
         ],

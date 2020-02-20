@@ -2,10 +2,9 @@
 
 namespace app\models\base;
 
+use Yii;
 use app\models\Departments;
 use app\models\Institutes;
-use Yii;
-
 /**
  * This is the model class for table "users".
  *
@@ -27,6 +26,10 @@ use Yii;
  * @property int|null $departmentId
  * @property string $created_on
  * @property string $updated_on
+ * @property int|null $teacher
+ * @property int|null $top
+ * @property string|null $fullName
+ * @property string|null $shortName
  *
  * @property Departments[] $departments
  * @property Institutes[] $institutes
@@ -54,11 +57,13 @@ class BaseUsers extends \yii\db\ActiveRecord
     {
         return [
             [['username'], 'required'],
-            [['active', 'degreeId', 'rankId', 'positionId', 'rateId', 'occupationId', 'departmentId'], 'integer'],
+            [['active', 'degreeId', 'rankId', 'positionId', 'rateId', 'occupationId', 'departmentId', 'teacher', 'top'], 'integer'],
             [['created_on', 'updated_on'], 'safe'],
             [['surname', 'name', 'middleName', 'email'], 'string', 'max' => 256],
             [['username'], 'string', 'max' => 128],
             [['passwordHash', 'token', 'auth_key'], 'string', 'max' => 300],
+            [['fullName'], 'string', 'max' => 1024],
+            [['shortName'], 'string', 'max' => 255],
             [['username'], 'unique'],
             [['degreeId'], 'exist', 'skipOnError' => true, 'targetClass' => Degree::className(), 'targetAttribute' => ['degreeId' => 'id']],
             [['departmentId'], 'exist', 'skipOnError' => true, 'targetClass' => Departments::className(), 'targetAttribute' => ['departmentId' => 'id']],
@@ -93,6 +98,10 @@ class BaseUsers extends \yii\db\ActiveRecord
             'departmentId' => Yii::t('app', 'Department ID'),
             'created_on' => Yii::t('app', 'Created On'),
             'updated_on' => Yii::t('app', 'Updated On'),
+            'teacher' => Yii::t('app', 'Teacher'),
+            'top' => Yii::t('app', 'Top'),
+            'fullName' => Yii::t('app', 'Full Name'),
+            'shortName' => Yii::t('app', 'Short Name'),
         ];
     }
 

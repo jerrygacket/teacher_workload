@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\base\BaseController;
 use app\components\DepartmentsComponent;
 use app\controllers\actions\IndexAction;
+use app\controllers\actions\EditAction;
 use app\models\Departments;
 
 class DepartmentsController extends BaseController
@@ -18,6 +19,12 @@ class DepartmentsController extends BaseController
 //            'new'=>['class'=>ActivityCreateAction::class,'rbac'=>$this->getRbac()],
             'index'=>[
                 'class'=>IndexAction::class,
+                //'rbac'=>$this->getRbac(),
+                'component' => DepartmentsComponent::class,
+                'model' => Departments::class,
+            ],
+            'edit'=>[
+                'class'=>EditAction::class,
                 //'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,

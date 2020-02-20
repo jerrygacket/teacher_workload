@@ -1,7 +1,7 @@
 <?php
 namespace app\controllers\actions;
 
-class IndexAction extends \yii\base\Action
+class EditAction extends \yii\base\Action
 {
     public $rbac;
     public $component;
@@ -16,12 +16,12 @@ class IndexAction extends \yii\base\Action
     public function run()
     {
         $component = \Yii::createObject(['class' => $this->component, 'nameClass' => $this->model]);
-        $provider = $component->getDataProvider(\Yii::$app->request->queryParams);
+        $model = $component->getModel(\Yii::$app->request->queryParams);
 //        if (!$this->rbac->canCreateActivity()){
 //            //throw new HttpException(403,'No access to create activity')
 //            return \Yii::$app->runAction('auth/signin');
 //        }
 
-        return $this->controller->render('index', ['provider'=>$provider]);
+        return $this->controller->render('edit', ['model'=>$model]);
     }
 }

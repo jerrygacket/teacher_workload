@@ -14,7 +14,7 @@ class m200213_132727_create_departments_table extends Migration
     {
         $this->createTable('{{%departments}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(256),
+//            'name' => $this->string(256),
             'fullName' => $this->text(),
             'headId' => $this->integer(5)->defaultValue(null),
             'instituteId' => $this->integer(3)->defaultValue(null),
