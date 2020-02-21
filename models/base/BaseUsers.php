@@ -64,7 +64,6 @@ class BaseUsers extends \yii\db\ActiveRecord
             [['passwordHash', 'token', 'auth_key'], 'string', 'max' => 300],
             [['fullName'], 'string', 'max' => 1024],
             [['shortName'], 'string', 'max' => 255],
-            [['username'], 'unique'],
             [['degreeId'], 'exist', 'skipOnError' => true, 'targetClass' => Degree::className(), 'targetAttribute' => ['degreeId' => 'id']],
             [['departmentId'], 'exist', 'skipOnError' => true, 'targetClass' => Departments::className(), 'targetAttribute' => ['departmentId' => 'id']],
             [['occupationId'], 'exist', 'skipOnError' => true, 'targetClass' => Occupation::className(), 'targetAttribute' => ['occupationId' => 'id']],

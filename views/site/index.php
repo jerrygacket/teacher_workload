@@ -2,14 +2,12 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
         <h1>Расчет индивидуальной нагрузки</h1>
-
-        <p class="lead">Для расчета надо добавить институты и кафедры</p>
+        <p>Здесь текст описание... Или ссылки на документы</p>
 
     </div>
 

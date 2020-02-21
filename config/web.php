@@ -1,5 +1,12 @@
 <?php
 
+use app\components\AuthComponent;
+use app\components\CatalogComponent;
+use app\components\DepartmentsComponent;
+use app\components\InstitutesComponent;
+use app\components\RbacComponent;
+use app\components\UsersComponent;
+
 $params = require __DIR__ . '/params.php';
 $db = file_exists(__DIR__ . '/db_local.php')
     ? (require __DIR__ . '/db_local.php')
@@ -18,8 +25,13 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'catalog' => ['class'=>\app\components\CatalogComponent::class,'nameClass'=>'\app\models\Catalog'],
+        'catalog' => ['class'=> CatalogComponent::class,'nameClass'=>'\app\models\Catalog'],
+        'departments' => ['class'=> DepartmentsComponent::class,'nameClass'=>'\app\models\Departments'],
+        'institutes' => ['class'=> InstitutesComponent::class,'nameClass'=>'\app\models\Institutes'],
+        'users' => ['class'=> UsersComponent::class,'nameClass'=>'\app\models\Users'],
+        'auth' => ['class'=> AuthComponent::class,'nameClass'=>'\app\models\Users'],
         'authManager' => ['class'=>'\yii\rbac\DbManager'],
+        'rbac'=>['class'=> RbacComponent::class],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'WohviMuakiezeig4ahthoofea9lae4OhXee9aeng',
@@ -28,7 +40,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -68,6 +80,7 @@ if (YII_ENV_DEV) {
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['*'],
     ];
 
     $config['bootstrap'][] = 'gii';

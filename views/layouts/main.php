@@ -50,22 +50,15 @@ if (Yii::$app->user->isGuest) {
 } else {
     if (Yii::$app->user->identity->username == 'admin') {
         $menuItems[] = '<li class="nav-item">'
-            .Html::a('<i class="fas fa-cogs"></i>', ['/chart/index'], ['class' => 'nav-link waves-effect waves-light'])
+            .Html::a('<i class="fas fa-cogs"></i>', ['/site/about'], ['class' => 'nav-link waves-effect waves-light'])
             . '</li>';
         $menuItems[] = '<li class="nav-item">'
-            .Html::a('<i class="fas fa-users"></i>', ['/user/index'], ['class' => 'nav-link waves-effect waves-light'])
+            .Html::a('<i class="fas fa-users"></i>', ['/users/index'], ['class' => 'nav-link waves-effect waves-light'])
             . '</li>';
     }
 
-    $chartPages = \app\models\ChartPage::find()->all();
-    $pageItems = [];
-    foreach ($chartPages as $chartPage) {
-        $pageItems[] = ['label' => $chartPage->title, 'url' => ['/chart/chart-page?id='.$chartPage->id], 'options' => ['class' => 'btn btn-primary']];
-    }
-    $menuItems[] = ['label' => '<i class="fas fa-chart-line"></i>', 'items' => $pageItems, 'encode' => false];
-
     $menuItems[] = '<li class="nav-item">'
-        .Html::a('('. Yii::$app->user->identity->username .')'.'<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['class' => 'nav-link waves-effect waves-light'])
+        .Html::a('('. Yii::$app->user->identity->username .')'.'<i class="fas fa-sign-out-alt"></i>', ['/auth/logout'], ['class' => 'nav-link waves-effect waves-light'])
         . '</li>';
 }
 echo \yii\bootstrap4\Nav::widget([
