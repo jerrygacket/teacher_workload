@@ -11,6 +11,9 @@ $params = require __DIR__ . '/params.php';
 $db = file_exists(__DIR__ . '/db_local.php')
     ? (require __DIR__ . '/db_local.php')
     : (require __DIR__ . '/db.php');
+$fbDb = file_exists(__DIR__ . '/fb_connect_local.php')
+    ? (require __DIR__ . '/fb_connect_local.php')
+    : (require __DIR__ . '/fb_connect.php');
 
 $config = [
     'id' => 'basic',
@@ -63,6 +66,7 @@ $config = [
             ],
         ],
         'db' => $db,
+        'fbDb' => $fbDb,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

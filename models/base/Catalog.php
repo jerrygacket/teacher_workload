@@ -12,7 +12,7 @@ use Yii;
  * @property string|null $tableName
  * @property string|null $modelName
  */
-class BaseCatalog extends \yii\db\ActiveRecord
+class Catalog extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

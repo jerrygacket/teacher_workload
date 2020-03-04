@@ -2,9 +2,7 @@
 
 namespace app\models;
 
-use app\models\base\BaseDepartments;
-
-class Departments extends BaseDepartments
+class Departments extends \app\models\base\Departments
 {
     public function rules()
     {

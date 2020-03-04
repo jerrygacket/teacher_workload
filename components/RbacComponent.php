@@ -51,11 +51,11 @@ class RbacComponent extends Component
 //        $authManager->assign($admin,1);
     }
 
-    public function canCreateChat(){
+    public function canCreateAll(){
         return \Yii::$app->user->can('createChart');
     }
 
-    public function canViewChat(){
+    public function canViewAll(){
         if(\Yii::$app->user->can('viewAllChart')){
             return true;
         }

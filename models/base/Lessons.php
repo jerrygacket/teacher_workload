@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string|null $name
  */
-class BaseClass extends \yii\db\ActiveRecord
+class Lessons extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

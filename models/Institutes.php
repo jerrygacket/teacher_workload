@@ -2,10 +2,9 @@
 
 namespace app\models;
 
-use app\models\base\BaseInstitutes;
 use Yii;
 
-class Institutes extends BaseInstitutes
+class Institutes extends \app\models\base\Institutes
 {
 
     public function rules()
@@ -15,6 +14,7 @@ class Institutes extends BaseInstitutes
             ['name', 'trim'],
             ['fullName', 'required'],
             ['fullName', 'trim'],
+            [['SHFAK', 'FAK', 'NFAK', 'DEKAN', 'NFAKR', 'SEMESTR'], 'safe'],
         ]);
     }
 

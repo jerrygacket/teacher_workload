@@ -40,7 +40,7 @@ use app\models\Institutes;
  * @property Rank $rank
  * @property Rate $rate
  */
-class BaseUsers extends \yii\db\ActiveRecord
+class Users extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

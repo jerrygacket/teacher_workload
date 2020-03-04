@@ -2,13 +2,12 @@
 
 namespace app\models;
 
-use app\models\base\BaseUsers;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
 
-class Users extends BaseUsers implements IdentityInterface
+class Users extends \app\models\base\Users implements IdentityInterface
 {
     public $password;
     public $newPassword = '';

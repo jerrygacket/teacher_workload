@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Connection;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -88,11 +89,16 @@ class SiteController extends Controller
 
     /**
      * Displays about page.
-     *
+     * @var $db Connection
      * @return string
      */
     public function actionAbout()
     {
-        return $this->render('about');
+//        $db = Yii::createObject(Yii::$app->components['fbDb']);
+//        $data = Yii::$app->fbDb->createCommand('select * from FAKUL where CUR_YEAR = 2020')
+        $data = Yii::$app->fbDb->createCommand('select * from KAFEDR where CUR_YEAR = 2020')
+            ->queryAll();
+        $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
+        return $this->render('about', ['data' => $data]);
     }
 }

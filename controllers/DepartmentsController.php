@@ -8,6 +8,7 @@ use app\base\BaseController;
 use app\components\DepartmentsComponent;
 use app\controllers\actions\IndexAction;
 use app\controllers\actions\EditAction;
+use app\controllers\actions\UpdateAction;
 use app\models\Departments;
 
 class DepartmentsController extends BaseController
@@ -25,6 +26,12 @@ class DepartmentsController extends BaseController
             ],
             'edit'=>[
                 'class'=>EditAction::class,
+                //'rbac'=>$this->getRbac(),
+                'component' => DepartmentsComponent::class,
+                'model' => Departments::class,
+            ],
+            'update'=>[
+                'class'=>UpdateAction::class,
                 //'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,

@@ -11,6 +11,7 @@ use yii\helpers\Html; ?>
     'dataProvider' => $provider,
     'columns' => [
         'id:html',
+        'username:html',
         'surname:html',
         'name:html',
         'middleName:html',

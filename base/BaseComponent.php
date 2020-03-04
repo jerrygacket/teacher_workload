@@ -46,4 +46,20 @@ class BaseComponent extends Component
 
         return empty($params['id']) ? $model : $model::findOne(['id'=>$params['id']]);
     }
+
+    public function getDataFromFB($tableName) {
+        $data = \Yii::$app->fbDb->createCommand('select 1 from RDB$RELATIONS WHERE RDB$RELATION_NAME = \''.$tableName.'\'')
+            ->queryAll();
+        if (empty($data)) {
+            return false;
+        }
+
+        $data = \Yii::$app->fbDb->createCommand('select * from '.$tableName.' where CUR_YEAR = '.date('Y'))
+            ->queryAll();
+
+        // данные почему-то хранятся в кодировке Windows-1251!!!!!!
+        $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
+
+        return $data;
+    }
 }

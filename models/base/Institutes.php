@@ -2,31 +2,33 @@
 
 namespace app\models\base;
 
-use app\models\Institutes;
-use app\models\Users;
 use Yii;
 
 /**
- * This is the model class for table "departments".
+ * This is the model class for table "institutes".
  *
  * @property int $id
  * @property string|null $name
  * @property string|null $fullName
  * @property int|null $headId
- * @property int|null $instituteId
+ * @property string|null $SHFAK
+ * @property string|null $FAK
+ * @property string|null $NFAK
+ * @property string|null $DEKAN
+ * @property string|null $NFAKR
+ * @property string|null $SEMESTR
  *
+ * @property Departments[] $departments
  * @property Users $head
- * @property Institutes $institute
- * @property Users[] $users
  */
-class BaseDepartments extends \yii\db\ActiveRecord
+class Institutes extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'departments';
+        return 'institutes';
     }
 
     /**
@@ -36,10 +38,10 @@ class BaseDepartments extends \yii\db\ActiveRecord
     {
         return [
             [['fullName'], 'string'],
-            [['headId', 'instituteId'], 'integer'],
+            [['headId'], 'integer'],
             [['name'], 'string', 'max' => 256],
+            [['SHFAK', 'FAK', 'NFAK', 'DEKAN', 'NFAKR', 'SEMESTR'], 'string', 'max' => 255],
             [['headId'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['headId' => 'id']],
-            [['instituteId'], 'exist', 'skipOnError' => true, 'targetClass' => Institutes::className(), 'targetAttribute' => ['instituteId' => 'id']],
         ];
     }
 
@@ -53,8 +55,23 @@ class BaseDepartments extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'fullName' => Yii::t('app', 'Full Name'),
             'headId' => Yii::t('app', 'Head ID'),
-            'instituteId' => Yii::t('app', 'Institute ID'),
+            'SHFAK' => Yii::t('app', 'Shfak'),
+            'FAK' => Yii::t('app', 'Fak'),
+            'NFAK' => Yii::t('app', 'Nfak'),
+            'DEKAN' => Yii::t('app', 'Dekan'),
+            'NFAKR' => Yii::t('app', 'Nfakr'),
+            'SEMESTR' => Yii::t('app', 'Semestr'),
         ];
+    }
+
+    /**
+     * Gets query for [[Departments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDepartments()
+    {
+        return $this->hasMany(Departments::className(), ['instituteId' => 'id']);
     }
 
     /**
@@ -65,25 +82,5 @@ class BaseDepartments extends \yii\db\ActiveRecord
     public function getHead()
     {
         return $this->hasOne(Users::className(), ['id' => 'headId']);
-    }
-
-    /**
-     * Gets query for [[Institute]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getInstitute()
-    {
-        return $this->hasOne(Institutes::className(), ['id' => 'instituteId']);
-    }
-
-    /**
-     * Gets query for [[Users]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        return $this->hasMany(Users::className(), ['departmentId' => 'id']);
     }
 }

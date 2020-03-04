@@ -7,8 +7,9 @@
 
 use yii\helpers\Html;
 $cancelButton = Html::a('Создать кафедру', '/departments/edit', ['class' => 'btn blue-gradient']);
+$updateButton = Html::a('Загрузить из базы ФБ', '/departments/update', ['class' => 'btn btn-danger']);
 ?>
-<?= $cancelButton ?>
+<?= $updateButton ?>
 <?=\yii\grid\GridView::widget([
     'dataProvider' => $provider,
     'columns' => [
@@ -16,6 +17,11 @@ $cancelButton = Html::a('Создать кафедру', '/departments/edit', ['
         'name:html',
         'fullName:html',
         'head:html',
+        'SHFAK:html',
+        'SHKAF:html',
+        'ZAV:html',
+        'NKAF:html',
+        'NFAKR:html',
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
@@ -63,4 +69,3 @@ $cancelButton = Html::a('Создать кафедру', '/departments/edit', ['
     ],
 ])
 ?>
-<?= $cancelButton ?>
