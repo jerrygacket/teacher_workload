@@ -16,7 +16,6 @@ $updateButton = Html::a('Загрузить из базы ФБ', '/institutes/up
         'id:html',
         'name:html',
         'fullName:html',
-        'head:html',
         'SHFAK:html',
         'FAK:html',
         'NFAK:html',

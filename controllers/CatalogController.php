@@ -42,4 +42,13 @@ class CatalogController extends BaseController
 
         return $this->redirect('/catalog');
     }
+
+    public function actionKafLoad() {
+        $tableName = Yii::$app->request->getBodyParam('table', null);
+        $data = Yii::$app->fbDb->createCommand('select * from NAGR2016 where CUR_YEAR = 2019')
+            ->queryAll();
+        $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
+
+        return $this->render('kafLoad', ['data' => $data]);
+    }
 }

@@ -42,7 +42,12 @@ use yii\helpers\Html;
 
 $menuItems = [
     '<li class="nav-item">'
-    .Html::a('<i class="fas fa-home"></i>', [Yii::$app->homeUrl], ['class' => 'nav-link waves-effect waves-light'])
+    .Html::a('<i class="fas fa-home"></i>', [Yii::$app->homeUrl],
+        [
+            'class' => 'nav-link waves-effect waves-light',
+            'title' => 'На главную',
+            'data-toggle' => 'tooltip',
+        ])
     . '</li>'
 ];
 if (Yii::$app->user->isGuest) {
@@ -50,15 +55,43 @@ if (Yii::$app->user->isGuest) {
 } else {
     if (Yii::$app->user->identity->username == 'admin') {
         $menuItems[] = '<li class="nav-item">'
-            .Html::a('<i class="fas fa-cogs"></i>', ['/site/about'], ['class' => 'nav-link waves-effect waves-light'])
+            .Html::a('<i class="fas fa-cogs"></i>', ['/site/about'],
+                [
+                    'class' => 'nav-link waves-effect waves-light',
+                    'title' => 'Настройки',
+                    'data-toggle' => 'tooltip',
+                ])
             . '</li>';
         $menuItems[] = '<li class="nav-item">'
-            .Html::a('<i class="fas fa-users"></i>', ['/users/index'], ['class' => 'nav-link waves-effect waves-light'])
+            .Html::a('<i class="fas fa-users"></i>', ['/users/index'],
+                [
+                    'class' => 'nav-link waves-effect waves-light',
+                    'title' => 'Пользователи',
+                    'data-toggle' => 'tooltip',
+                ])
             . '</li>';
     }
+    $menuItems[] = '<li class="nav-item">'
+        .Html::a(
+                '<i class="far fa-calendar-alt"></i>',
+                ['/catalog/kaf-load'],
+                [
+                    'class' => 'nav-link waves-effect waves-light',
+                    'title' => 'Общекафедральная нагрузка',
+                    'data-toggle' => 'tooltip',
+                ]
+        )
+        . '</li>';
 
     $menuItems[] = '<li class="nav-item">'
-        .Html::a('('. Yii::$app->user->identity->username .')'.'<i class="fas fa-sign-out-alt"></i>', ['/auth/logout'], ['class' => 'nav-link waves-effect waves-light'])
+        .Html::a(
+                '('. Yii::$app->user->identity->username .')'.'<i class="fas fa-sign-out-alt"></i>',
+                ['/auth/logout'],
+            [
+                'class' => 'nav-link waves-effect waves-light',
+                'title' => 'Выход',
+                'data-toggle' => 'tooltip',
+            ])
         . '</li>';
 }
 echo \yii\bootstrap4\Nav::widget([
@@ -81,6 +114,8 @@ echo \yii\bootstrap4\Nav::widget([
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="/js/mdb.min.js"></script>
+<!--<script type="text/javascript" src="/js/addons/datatables.min.js"></script>-->
+<!--<script type="text/javascript" src="/js/tableSort.js"></script>-->
 
 <?php $this->endBody() ?>
 </body>

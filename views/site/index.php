@@ -15,28 +15,16 @@
 
         <div class="row">
             <div class="col-md-3 col-12">
-                <h2>Справочники</h2>
-
-                <p>Описание (кратко)</p>
-                <p><a class="btn peach-gradient" href="/catalog">Посмотреть</a></p>
+                <a class="btn btn-primary" href="/catalog">Справочники</a>
             </div>
             <div class="col-md-3 col-12">
-                <h2>Институты</h2>
-
-                <p>Институты</p>
-                <p><a class="btn peach-gradient" href="/institutes">Посмотреть</a></p>
+                <p><a class="btn btn-primary" href="/institutes">Институты</a></p>
             </div>
             <div class="col-md-3 col-12">
-                <h2>Кафедры</h2>
-
-                <p>Кафедры</p>
-                <p><a class="btn peach-gradient" href="/departments">Посмотреть</a></p>
+                <p><a class="btn btn-primary" href="/departments">Кафедры</a></p>
             </div>
             <div class="col-md-3 col-12">
-                <h2>Пользователи</h2>
-
-                <p>Пользователи</p>
-                <p><a class="btn peach-gradient" href="/users">Посмотреть</a></p>
+                <p><a class="btn btn-primary" href="/users">Пользователи</a></p>
             </div>
         </div>
 

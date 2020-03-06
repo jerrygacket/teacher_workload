@@ -96,7 +96,9 @@ class SiteController extends Controller
     {
 //        $db = Yii::createObject(Yii::$app->components['fbDb']);
 //        $data = Yii::$app->fbDb->createCommand('select * from FAKUL where CUR_YEAR = 2020')
-        $data = Yii::$app->fbDb->createCommand('select * from KAFEDR where CUR_YEAR = 2020')
+//        $data = Yii::$app->fbDb->createCommand('select * from KAFEDR where CUR_YEAR = 2020')
+        //SHKAF,SEM,SHFAK,KURS,N_GROUP1,POTOK,LEK_FACT,SEM_FACT,LAB_FACT,PRACT_FACT,EKZ_FACT,ZACH_FACT,DIPL_FACT,GOS_EKZ_FACT,NAZV,NAZV1,WSEGO1
+        $data = Yii::$app->fbDb->createCommand('select * from NAGR2016 where CUR_YEAR = 2019')
             ->queryAll();
         $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
         return $this->render('about', ['data' => $data]);

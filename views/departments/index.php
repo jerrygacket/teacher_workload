@@ -16,12 +16,10 @@ $updateButton = Html::a('Загрузить из базы ФБ', '/departments/u
         'id:html',
         'name:html',
         'fullName:html',
-        'head:html',
         'SHFAK:html',
         'SHKAF:html',
         'ZAV:html',
         'NKAF:html',
-        'NFAKR:html',
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',

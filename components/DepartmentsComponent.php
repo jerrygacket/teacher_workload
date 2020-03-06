@@ -21,9 +21,13 @@ class DepartmentsComponent extends BaseComponent
             if (empty($model)) {
                 $model = new $this->nameClass;
             }
-            $model->load($item);
+            $model->attributes = $item;
+            $model->name = $item['SHKAF'];
+            $model->fullName = $item['NKAF'];
 
             if (!$model->save()) {
+                print_r($model->getErrors());
+                \Yii::$app->end();
                 return false;
             }
         }

@@ -28,7 +28,6 @@ class InstitutesComponent extends BaseComponent
             $model->attributes = $item;
             $model->name = $item['FAK'];
             $model->fullName = $item['NFAK'];
-            //$model->load($item);
 
             if (!$model->save()) {
                 print_r($model->getErrors());

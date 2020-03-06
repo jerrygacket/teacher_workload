@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use app\models\base\Catalog;
 use Yii;
 
 /**
@@ -12,7 +11,7 @@ use Yii;
  * @property string|null $name
  * @property string|null $tableName
  */
-class Catalog extends Catalog
+class Catalog extends \app\models\base\Catalog
 {
     /**
      * {@inheritdoc}
