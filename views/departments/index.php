@@ -6,6 +6,7 @@
  */
 
 use yii\helpers\Html;
+$this->title = 'Кафедры';
 $cancelButton = Html::a('Создать кафедру', '/departments/edit', ['class' => 'btn blue-gradient']);
 $updateButton = Html::a('Загрузить из базы ФБ', '/departments/update', ['class' => 'btn btn-danger']);
 ?>
@@ -23,8 +24,8 @@ $updateButton = Html::a('Загрузить из базы ФБ', '/departments/u
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
-            'template' => '{view}&nbsp;&nbsp; {create} &nbsp;&nbsp; {delete}',
-            'controller' => 'Institutes',
+            'template' => '{view}&nbsp;&nbsp; {edit} &nbsp;&nbsp; {delete}',
+            'controller' => 'departments',
             'buttons' => [
                 'edit' => function ($url, $model, $key) {
                     return Html::a('<i class="fas fa-edit"></i>', $url);

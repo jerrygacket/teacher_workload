@@ -6,7 +6,7 @@
  */
 
 use yii\helpers\Html;
-
+$this->title = 'Справочники';
 ?>
 <div class="row">
     <?php

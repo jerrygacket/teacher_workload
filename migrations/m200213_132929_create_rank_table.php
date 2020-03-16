@@ -14,7 +14,6 @@ class m200213_132929_create_rank_table extends Migration
     {
         $this->createTable('{{%rank}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(256),
         ]);
     }
 

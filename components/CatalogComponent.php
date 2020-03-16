@@ -41,4 +41,16 @@ class CatalogComponent extends BaseComponent
         $rows = new Query;
         return $rows->select('name')->from($tableName)->all();
     }
+
+    public function addData($tableName, $data) {
+        if ($tableName && $data && Yii::$app->db->schema->getTableSchema($tableName)) {
+            \Yii::$app->db->createCommand()->insert($tableName, ['name' => $data])->execute();
+        }
+    }
+
+    public function delData($tableName, $data) {
+        if ($tableName && $data && Yii::$app->db->schema->getTableSchema($tableName)) {
+            \Yii::$app->db->createCommand()->delete($tableName, ['name' => $data])->execute();
+        }
+    }
 }

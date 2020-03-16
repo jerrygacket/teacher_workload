@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-
+$this->title = 'Главная';
 ?>
 <div class="site-index">
 
@@ -18,10 +18,13 @@
                 <a class="btn btn-primary" href="/catalog">Справочники</a>
             </div>
             <div class="col-md-3 col-12">
-                <p><a class="btn btn-primary" href="/institutes">Институты</a></p>
+                <a class="btn btn-success" href="/load/kaf-load">Общая нагрузка</a>
             </div>
             <div class="col-md-3 col-12">
-                <p><a class="btn btn-primary" href="/departments">Кафедры</a></p>
+                <p><a class="btn btn-info" href="/institutes">Институты</a></p>
+            </div>
+            <div class="col-md-3 col-12">
+                <p><a class="btn btn-info" href="/departments">Кафедры</a></p>
             </div>
             <div class="col-md-3 col-12">
                 <p><a class="btn btn-primary" href="/users">Пользователи</a></p>

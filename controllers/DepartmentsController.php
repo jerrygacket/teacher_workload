@@ -6,6 +6,7 @@ namespace app\controllers;
 
 use app\base\BaseController;
 use app\components\DepartmentsComponent;
+use app\controllers\actions\DeleteAction;
 use app\controllers\actions\IndexAction;
 use app\controllers\actions\EditAction;
 use app\controllers\actions\UpdateAction;
@@ -32,6 +33,12 @@ class DepartmentsController extends BaseController
             ],
             'update'=>[
                 'class'=>UpdateAction::class,
+                //'rbac'=>$this->getRbac(),
+                'component' => DepartmentsComponent::class,
+                'model' => Departments::class,
+            ],
+            'delete'=>[
+                'class'=>DeleteAction::class,
                 //'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,

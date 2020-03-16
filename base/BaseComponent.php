@@ -20,7 +20,7 @@ class BaseComponent extends Component
         }
     }
 
-    public function getDataProvider($params) {
+    public function getDataProvider($params = []) {
         $model = new $this->nameClass;
         $model->load($params);
 
@@ -61,5 +61,11 @@ class BaseComponent extends Component
         $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
 
         return $data;
+    }
+
+    public function delete($params = []) {
+        $model = $this->getModel($params);
+
+        return $model->delete();
     }
 }

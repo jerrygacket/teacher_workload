@@ -2,10 +2,13 @@
 
 /**
  * @var $this \yii\web\View
- * @var $catalogs
+ * @var $filterForm \app\models\FilterForm
  */
 
+$this->params['wide'] = true;
+
 use yii\helpers\Html;
+
 $heads = [
     'sem'=>'Семестр',
     'Index_d'=>'Код дисциплины',
@@ -39,7 +42,47 @@ $heads = [
 $this->title = 'Общекафедральная нагрузка';
 ?>
 <h1>Общекафедральная нагрузка</h1>
+<?php
+$form = \yii\widgets\ActiveForm::begin([
+    'id' => 'login-form',
+    'options' => [
+        'class' => 'form-horizontal',
+        'action'=>'/load/kaf-load',
+        'method' => 'post',
+        'enctype' => 'multipart/form-data'
+    ],
+]);
+echo '<div class="row">';
 
+echo '<div class="col-md-3 col-12">';
+echo $form->field($filterForm,'currentYear')->dropDownList(
+    array_combine(['2018','2019','2020'],['2018','2019','2020']),
+    [
+        'prompt' => 'Текущий год',
+    ]
+)->label(false);
+echo '</div>';
+
+echo '<div class="col-md-3 col-12">';
+echo $form->field($filterForm,'institute')->dropDownList(
+    \yii\helpers\ArrayHelper::map($institutes, 'SHFAK', 'NFAK'),
+    ['prompt' => 'Факультет...']
+)->label(false);
+echo '</div>';
+
+echo '<div class="col-md-3 col-12">';
+echo $form->field($filterForm,'department')->dropDownList(
+    \yii\helpers\ArrayHelper::map($departments, 'SHKAF', 'NKAF'),
+    ['prompt' => 'Кафедра...']
+)->label(false);
+echo '</div>';
+echo '<div class="col-md-3 col-12">';
+echo Html::submitButton('Применить', ['class' => 'btn btn-primary']);
+echo '</div>';
+
+echo '</div>';
+\yii\widgets\ActiveForm::end();
+?>
 <div class="row">
     <table id="commonLoad" class="table table-striped table-bordered table-sm">
         <thead>

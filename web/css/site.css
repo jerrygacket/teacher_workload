@@ -8,3 +8,19 @@ body {
         font-size: 3vh;
     }
 }
+
+th.rotate {
+    height:80px;
+    white-space: nowrap;
+    position:relative;
+}
+
+th.rotate > div {
+    transform: rotate(90deg);
+    position:absolute;
+    left:0;
+    right:0;
+    top: 10px;
+    margin:auto;
+
+}

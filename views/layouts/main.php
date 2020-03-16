@@ -74,7 +74,7 @@ if (Yii::$app->user->isGuest) {
     $menuItems[] = '<li class="nav-item">'
         .Html::a(
                 '<i class="far fa-calendar-alt"></i>',
-                ['/catalog/kaf-load'],
+                ['/load/kaf-load'],
                 [
                     'class' => 'nav-link waves-effect waves-light',
                     'title' => 'Общекафедральная нагрузка',
@@ -102,7 +102,7 @@ echo \yii\bootstrap4\Nav::widget([
 \yii\bootstrap4\NavBar::end();
 ?>
 
-<div class="container pt-3">
+<div class="container<?= isset($this->params['wide']) && $this->params['wide'] ? '-fluid' : '' ?> pt-3">
     <?= $content ?>
 </div>
 
