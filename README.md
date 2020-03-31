@@ -24,18 +24,18 @@ DIRECTORY STRUCTURE
 REQUIREMENTS
 ------------
 
-The minimum requirement by this project template that your Web server supports PHP 5.6.0.
+The minimum requirement by this project template that your Web server supports PHP 7.3.0.
 
 
 INSTALLATION
 ------------
 
 ```
-git clone https://github.com/jerrygacket/dashboards.git
-cd dashboards
+git clone https://github.com/jerrygacket/teacher_workload.git
+cd teacher_workload
 composer update
 ```
-make config/db_local.php with your db config
+make config/db_local.php with your db config and edit config/fb_connect.php
 ```
 php yii migrate
 php yii migrate --migrationPath=@yii/rbac/migrations
