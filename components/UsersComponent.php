@@ -23,6 +23,9 @@ class UsersComponent extends BaseComponent
      */
     public function createUser(&$model):bool{
         $model->setRegistrationScenario();
+        if (!$model->validate('password')) {
+            $model->password = $this->generateAuthKey();
+        }
         $model->passwordHash = $this->hashPassword($model->password);
         $model->auth_key = $this->generateAuthKey();
         //$model->active = 1;

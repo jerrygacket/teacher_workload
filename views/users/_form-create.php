@@ -16,13 +16,23 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
 
 <div class="row">
     <div class="col-md-6 col-12">
-        <?=$form->field($model, 'username', ['enableClientValidation'=>false,
+        <?php
+        if (Yii::$app->user->identity->username == 'admin') {
+            echo $form->field($model, 'username', ['enableClientValidation'=>false,
+                'enableAjaxValidation'=>true])
+                ->textInput(['required'=>true]);
+            echo $form->field($model, 'password', ['enableClientValidation'=>false,
             'enableAjaxValidation'=>true])
-            ->textInput(['required'=>true]); ?>
+            ->passwordInput(['required'=>true]);
+        } else {
+            //оставим так для упрощения заведения пользователей методистами. потом что-нибудь придумаем.
+            $model->username = \Yii::$app->security->generateRandomString(8);
+            $model->password = \Yii::$app->security->generateRandomString(8);
+            echo $form->field($model,'username')->hiddenInput()->label(false);
+            echo $form->field($model,'password')->hiddenInput()->label(false);
+        }
+        ?>
 
-        <?=$form->field($model, 'password', ['enableClientValidation'=>false,
-            'enableAjaxValidation'=>true])
-            ->passwordInput(['required'=>true]); ?>
         <?=$form->field($model, 'name')->textInput(); ?>
         <?=$form->field($model, 'surname')->textInput(); ?>
         <?=$form->field($model, 'middleName')->textInput(); ?>
@@ -83,7 +93,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите звание...'
             ]
         ); ?>
-        <?= $form->field($model,'positionId')->dropDownList(
+        <?php /* $form->field($model,'positionId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\base\Position::find()
                     ->all(),'id','name'
@@ -91,7 +101,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             [
                 'prompt' => 'Выберите должность...'
             ]
-        ); ?>
+        );?>
         <?= $form->field($model,'rateId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\base\Rate::find()
@@ -109,7 +119,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             [
                 'prompt' => 'Выберите занятость...'
             ]
-        ); ?>
+        ); */?>
     </div>
 </div>
     <div class="form-group">

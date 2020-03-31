@@ -4,6 +4,7 @@
 namespace app\components;
 
 
+use app\models\Users;
 use yii\base\Component;
 
 class RbacComponent extends Component
@@ -20,43 +21,90 @@ class RbacComponent extends Component
         /** удаляем все правила */
         $authManager->removeAll();
 
-//        $admin = $authManager->createRole('admin');
-//        $user = $authManager->createRole('user');
-//        $authManager->add($admin);
-//        $authManager->add($user);
-//
-//        $createChart = $authManager->createPermission('createChart');
-//        $createChart->description='Создания графиков';
-//        $viewAllChart = $authManager->createPermission('viewAllChart');
-//        $viewAllChart->description='Просмотр любых графиков';
-//
-//        $authManager->add($createChart);
-//        $authManager->add($viewAllChart);
-//
-//        $createUser = $authManager->createPermission('createUser');
-//        $createUser->description='Создание пользователей';
-//        $viewUsers = $authManager->createPermission('viewUsers');
-//        $viewUsers->description='Просмотр пользователей';
-//
-//        $authManager->add($createUser);
-//        $authManager->add($viewUsers);
-//
-//        $authManager->addChild($user,$viewAllChart);
-//        $authManager->addChild($admin,$user);
-//        $authManager->addChild($admin,$createChart);
-//        $authManager->addChild($admin,$createUser);
-//        $authManager->addChild($admin,$viewUsers);
-//
-//        $authManager->assign($user,2);
-//        $authManager->assign($admin,1);
+        $admin = $authManager->createRole('admin');
+        $user = $authManager->createRole('user');
+        $top = $authManager->createRole('top');
+        $teacher = $authManager->createRole('teacher');
+        $authManager->add($admin);
+        $authManager->add($user);
+        $authManager->add($top);
+        $authManager->add($teacher);
+
+        // ***************************************
+        $createKafLoad = $authManager->createPermission('createKafLoad');
+        $createKafLoad->description = 'Создание кафедральной нагрузки';
+        $viewAllKafLoad = $authManager->createPermission('viewAllKafLoad');
+        $viewAllKafLoad->description='Просмотр любых нагрузок';
+        $viewOwnerKafLoad = $authManager->createPermission('viewOwnerKafLoad');
+        $viewOwnerKafLoad->description='Просмотр нагрузок своей кафедры';
+        $viewOwnerLoad = $authManager->createPermission('viewOwnerLoad');
+        $viewOwnerLoad->description='Просмотр своих нагрузок';
+
+        $createCatalog = $authManager->createPermission('createCatalog');
+        $createCatalog->description='Создание и обновление справочников';
+
+        $createUser = $authManager->createPermission('createUser');
+        $createUser->description='Создание пользователей';
+        $viewUsers = $authManager->createPermission('viewUsers');
+        $viewUsers->description='Просмотр пользователей';
+        // ***************************************
+        $authManager->add($createKafLoad);
+        $authManager->add($viewAllKafLoad);
+        $authManager->add($viewOwnerKafLoad);
+        $authManager->add($viewOwnerLoad);
+        $authManager->add($createCatalog);
+
+        $authManager->add($createUser);
+        $authManager->add($viewUsers);
+        // ***************************************
+
+        $authManager->addChild($teacher,$viewOwnerLoad);
+        $authManager->addChild($top,$viewAllKafLoad);
+
+        $authManager->addChild($user,$viewOwnerKafLoad);
+        $authManager->addChild($user,$createKafLoad);
+
+        $authManager->addChild($admin,$user);
+        $authManager->addChild($admin,$createCatalog);
+        $authManager->addChild($admin,$viewAllKafLoad);
+        $authManager->addChild($admin,$createUser);
+        $authManager->addChild($admin,$viewUsers);
+        // ***************************************
+
+        /**
+         * @var $users Users[]
+         */
+        $users = Users::find()->all();
+        foreach ($users as $item) {
+            if ($item->teacher) {
+                $authManager->assign($teacher,$item->id);
+            }
+            if ($item->top) {
+                $authManager->assign($top,$item->id);
+            }
+            if (!$item->teacher && !$item->top) {
+                $authManager->assign($user,$item->id);
+            }
+            if ($item->username == 'admin') {
+                $authManager->assign($admin,$item->id);
+            }
+        }
     }
 
-    public function canCreateAll(){
-        return \Yii::$app->user->can('createChart');
+    public function canCreateKafLoad(){
+        return \Yii::$app->user->can('createKafLoad');
     }
 
-    public function canViewAll(){
-        if(\Yii::$app->user->can('viewAllChart')){
+    public function canCreateCatalog(){
+        return \Yii::$app->user->can('createCatalog');
+    }
+
+    public function canViewKafLoad(){
+        return \Yii::$app->user->can('viewOwnerKafLoad');
+    }
+
+    public function canViewAllKafLoad(){
+        if(\Yii::$app->user->can('viewAllKafLoad')){
             return true;
         }
 

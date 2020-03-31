@@ -98,18 +98,48 @@ echo '</div>';
         </thead>
         <tbody>
         <?php
-        foreach ($data as $item) {
-        ?>
-            <tr>
-                <?php
-                foreach ($heads as $key => $value) {
+        if (!empty($data)) {
+            foreach ($data as $item) {
                 ?>
-                <td><?= $item[strtoupper($key)] ?></td>
-                <?php
-                }
-                ?>
-            </tr>
-        <?php } ?>
+                <tr>
+                    <?php
+                    foreach ($heads as $key => $value) {
+                        echo '<td>'.$item[strtoupper($key)].'</td>';
+                    }
+                    ?>
+                </tr>
+            <?php }
+        }?>
         </tbody>
     </table>
+    <?php if (!empty($totals)) { ?>
+    <table id="totals" class="table table-striped table-bordered table-sm">
+        <thead>
+        <tr>
+            <th class="th-sm">Период</th>
+            <?php
+            foreach ($totals['Год'] as $key => $value) {
+                ?>
+                <th class="th-sm"><?= $heads[$key] ?></th>
+                <?php
+            }
+            ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+            foreach ($totals as $period => $item) {
+                ?>
+                <tr>
+                    <?php
+                    echo '<td>'.$period.'</td>';
+                    foreach ($item as $value) {
+                        echo '<td>'.round($value*100)/100..'</td>';
+                    }
+                    ?>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <?php } ?>
 </div>

@@ -19,25 +19,25 @@ class InstitutesController extends BaseController
         return [
             'index'=>[
                 'class'=>IndexAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => InstitutesComponent::class,
                 'model' => Institutes::class,
             ],
             'edit'=>[
                 'class'=>EditAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => InstitutesComponent::class,
                 'model' => Institutes::class,
             ],
             'update'=>[
                 'class'=>UpdateAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => InstitutesComponent::class,
                 'model' => Institutes::class,
             ],
             'delete'=>[
                 'class'=>DeleteAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => InstitutesComponent::class,
                 'model' => Institutes::class,
             ],

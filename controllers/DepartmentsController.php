@@ -17,33 +17,30 @@ class DepartmentsController extends BaseController
     public function actions()
     {
         return [
-//            'create'=>['class'=>ActivityCreateAction::class,'rbac'=>$this->getRbac()],
-//            'new'=>['class'=>ActivityCreateAction::class,'rbac'=>$this->getRbac()],
             'index'=>[
                 'class'=>IndexAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,
             ],
             'edit'=>[
                 'class'=>EditAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,
             ],
             'update'=>[
                 'class'=>UpdateAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,
             ],
             'delete'=>[
                 'class'=>DeleteAction::class,
-                //'rbac'=>$this->getRbac(),
+                'rbac'=>$this->getRbac(),
                 'component' => DepartmentsComponent::class,
                 'model' => Departments::class,
             ],
-//            'edit'=>['class'=>ActivityCreateAction::class,'rbac'=>$this->getRbac()],
         ];
     }
 }

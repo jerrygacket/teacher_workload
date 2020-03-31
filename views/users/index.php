@@ -15,6 +15,8 @@ use yii\helpers\Html; ?>
         'surname:html',
         'name:html',
         'middleName:html',
+        'teacher:html',
+        'top:html',
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',

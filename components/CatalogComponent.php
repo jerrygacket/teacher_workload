@@ -6,6 +6,7 @@ namespace app\components;
 
 use app\base\BaseComponent;
 use app\models\Catalog;
+use Yii;
 use yii\db\Query;
 
 /**

@@ -2,9 +2,11 @@
 
 namespace app\models;
 
+use app\models\base\UserPositions;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
 class Users extends \app\models\base\Users implements IdentityInterface
@@ -99,5 +101,25 @@ class Users extends \app\models\base\Users implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->auth_key == $authKey;
+    }
+
+    public function getPositions()
+    {
+        //$positions = new UserPositions();
+        return UserPositions::find()->where(['userId' => $this->id])->all();
+
+//        $tableName = 'userPositions';
+//        if (\Yii::$app->db->schema->getTableSchema($tableName)) {
+//            $rows = new Query;
+//            return $rows->select('*')->from($tableName)->where(['userId' => $this->id])->all();
+//        }
+//
+//        return [];
+    }
+
+    public function getInstitute()
+    {
+        $department = $this->getDepartment()->one();
+        return Institutes::find()->where(['SHFAK' => $department['SHFAK']])->asArray()->one();
     }
 }

@@ -24,6 +24,11 @@ class CatalogController extends BaseController
     }
 
     public function actionAdd() {
+        if (!$this->rbac->canCreateCatalog()){
+            //throw new HttpException(403,'No access to create activity')
+            return $this->redirect(['/auth/login']);
+        }
+
         $tableName = Yii::$app->request->getBodyParam('table', null);
         $data = Yii::$app->request->getBodyParam('name', null);
         if (Yii::$app->request->isPost) {
@@ -35,6 +40,11 @@ class CatalogController extends BaseController
     }
 
     public function actionDelete() {
+        if (!$this->rbac->canCreateCatalog()){
+            //throw new HttpException(403,'No access to create activity')
+            return $this->redirect(['/auth/login']);
+        }
+
         $tableName = Yii::$app->request->getBodyParam('table', null);
         $data = Yii::$app->request->getBodyParam('name', null);
         if (Yii::$app->request->isPost) {
