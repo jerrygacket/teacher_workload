@@ -88,15 +88,10 @@ echo '</div>';
         <thead>
         <tr>
             <?php
-            $verticals = ['kurs', 'stud', 'sem'];
-            foreach ($heads as $key => $value) {
-//                echo '<th class="th-sm '.(in_array($key, $verticals) ? 'rotate' : '') .'"><div>'.$key.' '.$value .'</div></th>';
-                echo '<th class="th-sm '
-                    .(in_array($key, $verticals) ? 'rotate' : '')
-                    .'"><div>'
-                    //.$key.' '
-                    .$value
-                    .'</div></th>';
+            foreach ($heads as $value) {
+                ?>
+                <th class="th-sm rotate"><div><?= $value ?></div></th>
+                <?php
             }
             ?>
         </tr>
@@ -109,16 +104,7 @@ echo '</div>';
                 <tr>
                     <?php
                     foreach ($heads as $key => $value) {
-
-                        echo '<td>';
-                        //print_r(is_numeric(trim($item[strtoupper($key)])));
-                        if (is_numeric($item[strtoupper($key)])) {
-                            $flt = floatval($item[strtoupper($key)]);
-                            echo  $flt == 0 ? '' : $flt;
-                        } else {
-                            echo $item[strtoupper($key)];
-                        }
-                        echo '</td>';
+                        echo '<td>'.$item[strtoupper($key)].'</td>';
                     }
                     ?>
                 </tr>

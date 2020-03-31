@@ -24,7 +24,7 @@ class BaseComponent extends Component
         $model = new $this->nameClass;
         $model->load($params);
 
-        $query = $model::find();
+        $query = $model::find($params);
 
         $provider = new ActiveDataProvider([
             'query' => $query,

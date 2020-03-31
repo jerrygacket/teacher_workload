@@ -24,7 +24,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             echo $form->field($model, 'password', ['enableClientValidation'=>false,
             'enableAjaxValidation'=>true])
             ->passwordInput(['required'=>true]);
-        } else {
+        } elseif (empty($model->id)) {
             //оставим так для упрощения заведения пользователей методистами. потом что-нибудь придумаем.
             $model->username = \Yii::$app->security->generateRandomString(8);
             $model->password = \Yii::$app->security->generateRandomString(8);
@@ -32,9 +32,8 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             echo $form->field($model,'password')->hiddenInput()->label(false);
         }
         ?>
-
-        <?=$form->field($model, 'name')->textInput(); ?>
         <?=$form->field($model, 'surname')->textInput(); ?>
+        <?=$form->field($model, 'name')->textInput(); ?>
         <?=$form->field($model, 'middleName')->textInput(); ?>
         <?=$form->field($model, 'email')->textInput(); ?>
         <div class="custom-control custom-checkbox">
@@ -75,6 +74,24 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите кафедру...'
             ]
         ); ?>
+        <?php
+//        if (Yii::$app->user->identity->username == 'admin') {
+//            echo $form->field($model,'departmentId')->dropDownList(
+//                \yii\helpers\ArrayHelper::map(
+//                    \app\models\Departments::find()
+//                        ->all(),'id','fullName'
+//                ),
+//                [
+//                    'prompt' => 'Выберите кафедру...'
+//                ]
+//            );
+//        } else {
+//            $model->departmentId = \Yii::$app->user->departmentId;
+//            echo $form->field($model,'departmentId')->hiddenInput()->label(false);
+//            echo 'Кафедра: '.$model->getDepartment()->one();
+//        }
+        ?>
+
         <?= $form->field($model,'degreeId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\base\Degree::find()

@@ -6,6 +6,7 @@ namespace app\controllers;
 
 use app\base\BaseController;
 use app\components\AuthComponent;
+use app\controllers\actions\EditAction;
 use app\controllers\actions\IndexAction;
 use app\controllers\actions\ViewAction;
 use app\models\base\UserPositions;
@@ -20,15 +21,15 @@ class UsersController extends BaseController
     public function actions()
     {
         return [
-            'index'=>[
-                'class'=>IndexAction::class,
-                'rbac'=>$this->getRbac(),
-                'component' => UsersComponent::class,
-                'model' => Users::class,
-            ],
-//            'edit'=>[
+//            'index'=>[
 //                'class'=>IndexAction::class,
-//                //'rbac'=>$this->getRbac(),
+//                'rbac'=>$this->getRbac(),
+//                'component' => UsersComponent::class,
+//                'model' => Users::class,
+//            ],
+//            'edit'=>[
+//                'class'=>EditAction::class,
+//                'rbac'=>$this->getRbac(),
 //                'component' => UsersComponent::class,
 //                'model' => Users::class,
 //            ],
@@ -55,18 +56,7 @@ class UsersController extends BaseController
                     return ActiveForm::validate($model);
                 }
                 $component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
-                if ($component->createUser($model)) {
-                    $authManager = $this->rbac->getAuthManager();
-                    if ($model->teacher) {
-                        $authManager->assign($authManager->getRole('teacher'),$model->id);
-                    }
-                    if ($model->top) {
-                        $authManager->assign($authManager->getRole('top'),$model->id);
-                    }
-                    if (!$model->teacher && !$model->top) {
-                        $authManager->assign($authManager->getRole('teacher'),$model->id);
-                    }
-
+                if ($component->updateUser($model)) {
                     return $this->redirect('index');
                 } else {
                     print_r($model->errors);
@@ -76,6 +66,48 @@ class UsersController extends BaseController
         }
 
         return $this->render('create', ['model' => $model]);
+    }
+
+    public function actionIndex() {
+        $this->rbac = $this->getRbac();
+        if (!$this->rbac->canCreateUser()) {
+            return $this->redirect('/auth/login');
+        }
+
+        $component = \Yii::$app->users;
+
+        $currentUser = $component->getModel(['id' => \Yii::$app->user->id]);
+        $provider = $component->getDataProvider(['departmentId' => $currentUser->departmentId ?? '']);
+
+        return $this->render('index', ['provider'=>$provider]);
+    }
+
+    public function actionEdit() {
+        $this->rbac = $this->getRbac();
+        if (!$this->rbac->canCreateUser()) {
+            return $this->redirect('/auth/login');
+        }
+
+        $component = \Yii::$app->users;
+
+        $model = $component->getModel(\Yii::$app->request->queryParams);
+        if (\Yii::$app->request->isPost) {
+            if ($model->load(\Yii::$app->request->post())) {
+                if (\Yii::$app->request->isAjax) {
+                    \Yii::$app->response->format=Response::FORMAT_JSON;
+                    return ActiveForm::validate($model);
+                }
+                //$component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
+                if ($component->createUser($model)) {
+                    return $this->redirect('index');
+                } else {
+                    print_r($model->errors);
+                    \Yii::$app->end(0);
+                }
+            }
+        }
+
+        return $this->render('edit', ['model' => $model]);
     }
 
     public function actionAddPosition() {

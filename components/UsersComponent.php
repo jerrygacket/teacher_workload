@@ -30,6 +30,7 @@ class UsersComponent extends BaseComponent
         $model->auth_key = $this->generateAuthKey();
         //$model->active = 1;
         if($model->save()){
+            $this->setPermissions($model);
             return true;
         }
 
@@ -49,9 +50,23 @@ class UsersComponent extends BaseComponent
             }
         }
         if($model->save()){
+            $this->setPermissions($model);
             return true;
         }
 
         return false;
+    }
+
+    private function setPermissions($model) {
+        $authManager = $this->rbac->getAuthManager();
+        if ($model->teacher) {
+            $authManager->assign($authManager->getRole('teacher'),$model->id);
+        }
+        if ($model->top) {
+            $authManager->assign($authManager->getRole('top'),$model->id);
+        }
+        if (!$model->teacher && !$model->top) {
+            $authManager->assign($authManager->getRole('teacher'),$model->id);
+        }
     }
 }

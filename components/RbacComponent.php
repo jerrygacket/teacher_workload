@@ -45,6 +45,8 @@ class RbacComponent extends Component
 
         $createUser = $authManager->createPermission('createUser');
         $createUser->description='Создание пользователей';
+//        $createTeacher = $authManager->createPermission('createTeacher');
+//        $createTeacher->description='Создание учителей';
         $viewUsers = $authManager->createPermission('viewUsers');
         $viewUsers->description='Просмотр пользователей';
         // ***************************************
@@ -63,11 +65,11 @@ class RbacComponent extends Component
 
         $authManager->addChild($user,$viewOwnerKafLoad);
         $authManager->addChild($user,$createKafLoad);
+        $authManager->addChild($user,$createUser);
 
         $authManager->addChild($admin,$user);
         $authManager->addChild($admin,$createCatalog);
         $authManager->addChild($admin,$viewAllKafLoad);
-        $authManager->addChild($admin,$createUser);
         $authManager->addChild($admin,$viewUsers);
         // ***************************************
 

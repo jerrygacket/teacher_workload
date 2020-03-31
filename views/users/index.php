@@ -20,14 +20,14 @@ use yii\helpers\Html; ?>
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
-            'template' => '{view} &nbsp;&nbsp; {delete}',
+            'template' => '{view} &nbsp;&nbsp; {edit} &nbsp;&nbsp; {delete}',
             'controller' => 'users',
             'buttons' => [
-//                'edit' => function ($url, $model, $key) {
-//                    return Html::a('<i class="fas fa-edit"></i>', $url);
-//                },
                 'view' => function ($url, $model, $key) {
                     return Html::a('<i class="fas fa-eye"></i>', $url);
+                },
+                'edit' => function ($url, $model, $key) {
+                    return Html::a('<i class="fas fa-edit"></i>', $url);
                 },
                 'delete' => function ($url, $model, $key) {
                     return Html::a('<i class="fas fa-times" style="color:red"></i>', $url,[
