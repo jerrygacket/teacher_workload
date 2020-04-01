@@ -4,7 +4,6 @@
 namespace app\models;
 
 
-use app\models\FilterForm;
 use yii\base\Model;
 
 class Load extends Model
@@ -13,8 +12,15 @@ class Load extends Model
 
     /**
      * @param $filters FilterForm
+     * @return array|bool|false|string|string[]|null
+     * @var $currentUser \app\models\Users
      */
     public function getCommonLoad($filters = null) {
+        if (\Yii::$app->user->identity->username != 'admin') {
+            $userModel = new Users();
+            $filters->department = $userModel::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
+            //print_r($filters);
+        }
         $sql = 'select * from '.$this->table.' where CUR_YEAR='.(empty($filters->currentYear) ? date('Y') : $filters->currentYear);
         if (!empty($filters->institute)) {
             $sql .= ' and SHFAK=\''.$filters->institute.'\'';

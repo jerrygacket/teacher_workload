@@ -120,6 +120,7 @@ class Users extends \app\models\base\Users implements IdentityInterface
     public function getInstitute()
     {
         $department = $this->getDepartment()->one();
+
         return Institutes::find()->where(['SHFAK' => $department['SHFAK']])->asArray()->one();
     }
 }

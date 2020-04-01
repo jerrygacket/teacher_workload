@@ -14,10 +14,10 @@ class LoadController extends BaseController
 {
     public function actionKafLoad() {
         $this->rbac = $this->getRbac();
-        if (!$this->rbac->canViewAllKafLoad()) {
-            if ($this->rbac->canViewKafLoad()) {
-                return $this->redirect('/load/own-kaf-load');
-            }
+        if (!$this->rbac->canViewKafLoad()) {
+//            if ($this->rbac->canViewKafLoad()) {
+//                return $this->redirect('/load/own-kaf-load');
+//            }
             return $this->redirect('/auth/login');
         }
 

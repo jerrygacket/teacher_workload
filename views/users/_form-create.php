@@ -17,6 +17,10 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
 <div class="row">
     <div class="col-md-6 col-12">
         <?php
+//        echo \Yii::$app->language;
+//        var_dump(\Yii::$app->i18n);
+//        echo "PHP: " . PHP_VERSION . "<br>";
+//        echo "ICU: " . INTL_ICU_VERSION . "\n";
         if (Yii::$app->user->identity->username == 'admin') {
             echo $form->field($model, 'username', ['enableClientValidation'=>false,
                 'enableAjaxValidation'=>true])
@@ -36,15 +40,24 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
         <?=$form->field($model, 'name')->textInput(); ?>
         <?=$form->field($model, 'middleName')->textInput(); ?>
         <?=$form->field($model, 'email')->textInput(); ?>
-        <div class="custom-control custom-checkbox">
-            <?= $form->field($model, 'active', ['options' => ['tag' => false,]])
-                ->checkbox([
-                    'checked' => true,
-                    'template' => '{input}{label}',
-                    'class' => 'custom-control-input'
-                ], false)
-                ->label('Активный пользователь', ['class' => 'custom-control-label']); ?>
-        </div>
+        <?php
+        if (Yii::$app->user->identity->username == 'admin') {
+            ?>
+            <div class="custom-control custom-checkbox">
+                <?= $form->field($model, 'active', ['options' => ['tag' => false,]])
+                    ->checkbox([
+                        'checked' => true,
+                        'template' => '{input}{label}',
+                        'class' => 'custom-control-input'
+                    ], false)
+                    ->label('Активный пользователь', ['class' => 'custom-control-label']); ?>
+            </div>
+            <?php
+        } else {
+            $model->active = true;
+            echo $form->field($model,'active')->hiddenInput()->label(false);
+        }
+        ?>
         <div class="custom-control custom-checkbox">
             <?= $form->field($model, 'teacher', ['options' => ['tag' => false,]])
                 ->checkbox([

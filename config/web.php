@@ -28,6 +28,19 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'ru-RU',
+                    'fileMap' => [
+                        'app'       => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
         'catalog' => ['class'=> CatalogComponent::class,'nameClass'=>'\app\models\Catalog'],
         'departments' => ['class'=> DepartmentsComponent::class,'nameClass'=>'\app\models\Departments'],
         'institutes' => ['class'=> InstitutesComponent::class,'nameClass'=>'\app\models\Institutes'],
