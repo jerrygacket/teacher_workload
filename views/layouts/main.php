@@ -26,6 +26,9 @@ use yii\helpers\Html;
     <!-- Material Design Bootstrap -->
     <link rel="stylesheet" href="/css/mdb.min.css">
 
+    <!-- Docs for tables -> https://datatables.net-->
+    <link rel="stylesheet" href="/css/addons/datatables.min.css">
+
     <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
@@ -106,6 +109,17 @@ echo \yii\bootstrap4\Nav::widget([
     <?= $content ?>
 </div>
 
+<!-- Footer -->
+<footer class="page-footer font-small blue">
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© <?=date('Y') == '2020' ? '2020' : '2020 - '.date('Y') ?> Copyright:
+        <a href="https://mdbootstrap.com/"> IvGPU</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+<?php $this->endBody() ?>
 <!-- jQuery -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <!-- Bootstrap tooltips -->
@@ -114,10 +128,12 @@ echo \yii\bootstrap4\Nav::widget([
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="/js/mdb.min.js"></script>
-<!--<script type="text/javascript" src="/js/addons/datatables.min.js"></script>-->
-<!--<script type="text/javascript" src="/js/tableSort.js"></script>-->
 
-<?php $this->endBody() ?>
+<!-- Docs for tables -> https://datatables.net-->
+<script type="text/javascript" src="/js/addons/datatables.min.js"></script>
+<script type="text/javascript" src="/js/addons/datatables-select.min.js"></script>
+<script type="text/javascript" src="/js/tableSort.js"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>

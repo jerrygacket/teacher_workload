@@ -39,8 +39,6 @@ class LoadController extends BaseController
             'filterForm' => $filterForm,
             'data' => $data,
             'totals' => $totals,
-            'institutes' => Institutes::find()->all(),
-            'departments' => Departments::find()->all(),
         ]);
     }
 }

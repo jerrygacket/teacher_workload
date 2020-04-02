@@ -17,10 +17,6 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
 <div class="row">
     <div class="col-md-6 col-12">
         <?php
-//        echo \Yii::$app->language;
-//        var_dump(\Yii::$app->i18n);
-//        echo "PHP: " . PHP_VERSION . "<br>";
-//        echo "ICU: " . INTL_ICU_VERSION . "\n";
         if (Yii::$app->user->identity->username == 'admin') {
             echo $form->field($model, 'username', ['enableClientValidation'=>false,
                 'enableAjaxValidation'=>true])

@@ -3,6 +3,10 @@ body {
     height: 100%;
 }
 
+body:not(.modal-open){
+    padding-right: 0px !important;
+}
+
 @media(max-width:767px) {
     .h1 {
         font-size: 3vh;

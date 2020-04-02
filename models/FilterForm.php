@@ -8,9 +8,19 @@ use yii\base\Model;
 
 class FilterForm extends Model
 {
+    const YEARS = [
+        '2018' => '2018',
+        '2019' => '2019',
+        '2020' => '2020',
+        '2021' => '2021',
+        '2022' => '2022',
+        '2023' => '2023',
+    ];
+
     public $currentYear;
     public $institute;
     public $department;
+    public $semester;
 
     public function rules()
     {
@@ -18,6 +28,7 @@ class FilterForm extends Model
             ['institute', 'trim'],
             ['department', 'trim'],
             ['currentYear', 'trim'],
+            ['semester', 'trim'],
         ]);
     }
 
@@ -30,6 +41,7 @@ class FilterForm extends Model
             'institute' => \Yii::t('app', 'Institute'),
             'department' => \Yii::t('app', 'Department'),
             'currentYear' => \Yii::t('app', 'Current year'),
+            'semester' => \Yii::t('app', 'Semester'),
         ];
     }
 }

@@ -29,6 +29,7 @@ return [
     'Dekan' => 'Декан',
     'Nfakr' => '',
     'Semestr' => 'Семестр',
+    'Semester' => 'Семестр',
     'Institute ID' => '',
     'Shkaf' => 'Кафедра',
     'Zav' => 'Зав. кафедрой',
@@ -36,4 +37,7 @@ return [
     'Fkaf' => '',
     'Kaf' => 'Кафедра',
     'Nkaf' => '',
+    'Institute' => 'Институт',
+    'Department' => 'Кафедра',
+    'Current year' => 'Текущий год',
 ];
