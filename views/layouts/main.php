@@ -74,17 +74,17 @@ if (Yii::$app->user->isGuest) {
                 ])
             . '</li>';
     }
-    $menuItems[] = '<li class="nav-item">'
-        .Html::a(
-                '<i class="far fa-calendar-alt"></i>',
-                ['/load/kaf-load'],
-                [
-                    'class' => 'nav-link waves-effect waves-light',
-                    'title' => 'Общекафедральная нагрузка',
-                    'data-toggle' => 'tooltip',
-                ]
-        )
-        . '</li>';
+//    $menuItems[] = '<li class="nav-item">'
+//        .Html::a(
+//                '<i class="far fa-calendar-alt"></i>',
+//                ['/load/kaf-load'],
+//                [
+//                    'class' => 'nav-link waves-effect waves-light',
+//                    'title' => 'Общекафедральная нагрузка',
+//                    'data-toggle' => 'tooltip',
+//                ]
+//        )
+//        . '</li>';
 
     $menuItems[] = '<li class="nav-item">'
         .Html::a(

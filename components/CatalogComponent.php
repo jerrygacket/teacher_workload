@@ -26,7 +26,7 @@ class CatalogComponent extends BaseComponent
     }
 
     public function getCatalogs(){
-        $catalogs = Catalog::find()->all();
+        $catalogs = Catalog::find()->andwhere(['<>', 'id', 10])->andwhere(['<>', 'id', 9])->all();
         $rows = [];
         foreach ($catalogs as $catalog) {
             if (!$catalog->modelName) {
