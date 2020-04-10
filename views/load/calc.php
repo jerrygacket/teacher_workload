@@ -2,7 +2,6 @@
 
 /**
  * @var $this \yii\web\View
- *  * @var $filterForm \app\models\FilterForm
  */
 
 $this->params['wide'] = true;
@@ -43,19 +42,23 @@ $heads = [
 ];
 $this->title = 'Общекафедральная нагрузка';
 ?>
-<h1>Общекафедральная нагрузка</h1>
-
-<?= $this->render('_filter-form',['filterForm' => $filterForm, 'action' => $action,]); ?>
-
+<h1>Распределение нагрузки для преподавателей кафедры <?=$filterForm->department?></h1>
+<?= $this->render('_filter-form',[
+    'filterForm' => $filterForm,
+    'action' => $action,
+    'fields' => [
+        'currentYear' => '1',
+        'semester' => '1'
+    ],
+]); ?>
 <div class="row">
     <div class="col-12">
         <table id="commonLoad" class="table table-striped table-bordered table-sm">
             <thead>
             <tr>
                 <?php
-                $verticals = ['kurs', 'stud', 'sem'];
                 foreach ($heads as $key => $value) {
-                    echo '<th class="th-sm ' .'"><div>'.$value .'</div></th>';
+                    echo '<th class="th-sm"><div>'.$value .'</div></th>';
                 }
                 ?>
             </tr>
@@ -64,10 +67,8 @@ $this->title = 'Общекафедральная нагрузка';
             <?php
             if (!empty($data)) {
                 foreach ($data as $itemKey => $item) {
-                    ?>
-                    <tr>
-                        <?php
-                        foreach ($heads as $key => $value) {
+                    foreach ($heads as $key => $value) {
+                            echo '<tr>';
                             $upKey = strtoupper($key);
                             echo '<td'.(is_numeric($item[$upKey]) ? ' class="text-center"' : '') .'>';
                             if (is_numeric($item[$upKey])) {
@@ -84,9 +85,9 @@ $this->title = 'Общекафедральная нагрузка';
                                 echo $item[$upKey];
                             }
                             echo '</td>';
-                        }
-                        ?>
-                    </tr>
+
+                    }
+                    ?>
                 <?php }
             }?>
             </tbody>
@@ -123,3 +124,6 @@ $this->title = 'Общекафедральная нагрузка';
         <?php } ?>
     </div>
 </div>
+<pre>
+    <?php print_r($data); ?>
+</pre>

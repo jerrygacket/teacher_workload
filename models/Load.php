@@ -9,6 +9,39 @@ use yii\base\Model;
 class Load extends Model
 {
     public $table = 'NAGR2016';
+    public $hoursHeads = [
+        'Lek_fact'=>'Лекции',
+        'Lab_fact'=>'Лаб.раб.',
+        'Sem_fact'=>'Семинары',
+        'Norma'=>'КП,КР,РГР',
+        'Ind_fact'=>'Индив.раб.',
+        'Pract_fact'=>'Практики',
+        'kons'=>'Консульт.',
+        'KZR'=>'К.р. реценз.',
+        'KZS'=>'К.р. собесед.',
+        'Ekz_fact'=>'Экзамен',
+        'Zach_fact'=>'Зачет',
+        'Dipl_fact'=>'Дипл.проект',
+        'Gos_Ekz_fact'=>'Гос.экзамен',
+        'Proch'=>'Прочее',
+        'Wsego1'=>'Всего',
+    ];
+    public $heads = [
+        'sem'=>'Семестр',
+        'Index_d'=>'Код дисциплины',
+        'Nazv1'=>'Наименование дисциплины',
+        'shfak'=>'Факультет',
+        'shkaf'=>'Кафедра',
+        'kurs'=>'Курс',
+        'stud'=>'Кол. студентов',
+        'npot'=>'Потоков',
+        'k_gr'=>'Групп',
+        'P_gr'=>'Подгрупп',
+        'N_group1'=>'Индекс группы',
+        'Potok'=>'Поток с',
+        'Wsego1'=>'Всего',
+        'Prim'=>'Примечание',
+    ];
 
     /**
      * @param $filters FilterForm
@@ -16,17 +49,20 @@ class Load extends Model
      * @var $currentUser \app\models\Users
      */
     public function getCommonLoad($filters = null) {
-        if (\Yii::$app->user->identity->username != 'admin') {
-            $userModel = new Users();
-            $filters->department = $userModel::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
-            //print_r($filters);
-        }
+//        if (\Yii::$app->user->identity->username != 'admin') {
+//            $userModel = new Users();
+//            $filters->department = $userModel::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
+//            //print_r($filters);
+//        }
         $sql = 'select * from '.$this->table.' where CUR_YEAR='.(empty($filters->currentYear) ? date('Y') : $filters->currentYear);
         if (!empty($filters->institute)) {
             $sql .= ' and SHFAK=\''.$filters->institute.'\'';
         }
         if (!empty($filters->department)) {
             $sql .= ' and SHKAF=\''.$filters->department.'\'';
+        }
+        if (!empty($filters->semester)) {
+            $sql .= ' and SEM=\''.$filters->semester.'\'';
         }
         $data = \Yii::$app->fbDb
             ->createCommand(mb_convert_encoding($sql, 'CP1251', 'UTF-8'))
@@ -67,6 +103,45 @@ class Load extends Model
             foreach ($result as $key => &$total) {
                 $total += $item[strtoupper($key)];
             }
+        }
+
+        return $result;
+    }
+
+    public function getKafLoad($commonLoad){
+        $result = [];
+        foreach ($commonLoad as $item) {
+            $lessons = $this->getLessons($item);
+            $info = $this->getSubjectInfo($item);
+            foreach ($lessons as $key => $lesson) {
+                $result[] = array_merge($info, [$key => $lesson]);
+            }
+            echo '<pre>';
+            print_r($result);
+            echo '</pre>';
+            \Yii::$app->end(0);
+        }
+
+        return [];
+    }
+
+    public function getLessons($subject) {
+        $result = [];
+        foreach ($this->hoursHeads as $key => $value) {
+            $upKey = strtoupper($key);
+            if (is_numeric($subject[$upKey]) && ($val = floatval($subject[$upKey]))) {
+                $result[$upKey] = $val;
+            }
+        }
+
+        return $result;
+    }
+
+    public function getSubjectInfo($subject) {
+        $result = [];
+        foreach ($this->heads as $key => $value) {
+            $upKey = strtoupper($key);
+            $result[$upKey] = $subject[$upKey];
         }
 
         return $result;

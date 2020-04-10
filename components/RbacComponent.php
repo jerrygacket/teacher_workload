@@ -63,13 +63,15 @@ class RbacComponent extends Component
         $authManager->addChild($teacher,$viewOwnerLoad);
         $authManager->addChild($top,$viewAllKafLoad);
 
-        $authManager->addChild($user,$viewOwnerKafLoad);
+        $authManager->addChild($user,$teacher);
+        $authManager->addChild($user,$top);
+        //$authManager->addChild($user,$viewOwnerKafLoad);
         $authManager->addChild($user,$createKafLoad);
         $authManager->addChild($user,$createUser);
 
         $authManager->addChild($admin,$user);
         $authManager->addChild($admin,$createCatalog);
-        $authManager->addChild($admin,$viewAllKafLoad);
+        //$authManager->addChild($admin,$viewAllKafLoad);
         $authManager->addChild($admin,$viewUsers);
         // ***************************************
 
