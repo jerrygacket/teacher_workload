@@ -32,7 +32,7 @@ use yii\helpers\Html;
     <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
-<?php $this->beginBody() ?>
+<?php //$this->beginBody() ?>
 
 <?php
 \yii\bootstrap4\NavBar::begin([
@@ -119,7 +119,7 @@ echo \yii\bootstrap4\Nav::widget([
 
 </footer>
 <!-- Footer -->
-<?php $this->endBody() ?>
+<?php //$this->endBody() ?>
 <!-- jQuery -->
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <!-- Bootstrap tooltips -->
@@ -133,6 +133,7 @@ echo \yii\bootstrap4\Nav::widget([
 <script type="text/javascript" src="/js/addons/datatables.min.js"></script>
 <script type="text/javascript" src="/js/addons/datatables-select.min.js"></script>
 <script type="text/javascript" src="/js/tableSort.js"></script>
+<script type="text/javascript" src="/js/actions.js"></script>
 
 </body>
 </html>

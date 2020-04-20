@@ -4,6 +4,7 @@
 namespace app\components;
 
 
+use app\models\base\UserPositions;
 use app\models\Users;
 use Yii;
 use yii\base\Component;
@@ -57,6 +58,17 @@ class AuthComponent extends Component
         $model->auth_key = $this->generateAuthKey();
         //$model->active = 1;
         if($model->save()){
+            $postVars = \Yii::$app->request->post();
+            if (isset($postVars['posId']) && isset($postVars['occId']) && isset($postVars['rateId'])) {
+                foreach ($postVars['posId'] as $key => $posId) {
+                    $userPosition = new UserPositions();
+                    $userPosition->userId = $model->id;
+                    $userPosition->occupationId = intval($postVars['occId'][$key]);
+                    $userPosition->positionId = intval($posId);
+                    $userPosition->rateId = intval($postVars['rateId'][$key]);
+                    $userPosition->save();
+                }
+            }
             return true;
         }
 

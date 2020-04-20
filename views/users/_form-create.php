@@ -42,7 +42,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             <div class="custom-control custom-checkbox">
                 <?= $form->field($model, 'active', ['options' => ['tag' => false,]])
                     ->checkbox([
-                        'checked' => true,
+                        //'checked' => isset($model->active) ? $model->active : true,
                         'template' => '{input}{label}',
                         'class' => 'custom-control-input'
                     ], false)
@@ -51,7 +51,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             <?php
         } else {
             $model->active = true;
-            echo $form->field($model,'active')->hiddenInput()->label(false);
+            echo $form->field($model,'active')->hiddenInput()->label(true);
         }
         ?>
         <div class="custom-control custom-checkbox">
@@ -119,6 +119,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите звание...'
             ]
         ); ?>
+        <?= $this->render('_positionFormJs',['userId' => $model->id]); ?>
         <?php /* $form->field($model,'positionId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\base\Position::find()
@@ -146,6 +147,11 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите занятость...'
             ]
         ); */?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+
     </div>
 </div>
     <div class="form-group">

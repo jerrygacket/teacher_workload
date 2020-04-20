@@ -4,6 +4,7 @@
 namespace app\base;
 
 
+use app\models\base\Users;
 use yii\base\Component;
 use yii\data\ActiveDataProvider;
 
@@ -22,10 +23,10 @@ class BaseComponent extends Component
 
     public function getDataProvider($params = []) {
         $model = new $this->nameClass;
-        $model->load($params);
 
-        $query = $model::find($params);
-
+        $query = $model::find()->where($params);
+//        print_r($query);
+//        \Yii::$app->end(0);
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [

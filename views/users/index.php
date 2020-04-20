@@ -11,12 +11,19 @@ use yii\helpers\Html; ?>
     'dataProvider' => $provider,
     'columns' => [
         'id:html',
-        'username:html',
+        $admin ? [
+            'attribute' => 'username',
+            'contentOptions' => [ 'style' => 'width: 6%;' ],
+        ] : null,
         'surname:html',
         'name:html',
         'middleName:html',
         'teacher:html',
         'top:html',
+        $admin ? [
+            'attribute' => 'active',
+            'contentOptions' => [ 'style' => 'width: 6%;' ],
+        ] : null,
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
@@ -30,6 +37,7 @@ use yii\helpers\Html; ?>
                     return Html::a('<i class="fas fa-edit"></i>', $url);
                 },
                 'delete' => function ($url, $model, $key) {
+                    //return $this->render('_form-delete',['model' => $model]);
                     return Html::a('<i class="fas fa-times" style="color:red"></i>', $url,[
                         'onclick' => 'if(confirm("Хотите удалить?")){
                                          return true;

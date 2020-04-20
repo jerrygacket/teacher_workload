@@ -70,9 +70,17 @@ $rates = \app\models\base\Rate::find()->all();
                     <?= $form->field($item,'positionId')->hiddenInput()->label(false) ?>
                     <?= $form->field($item,'rateId')->hiddenInput()->label(false) ?>
                     <?= $form->field($item,'occupationId')->hiddenInput()->label(false) ?>
-                    Должность: <?= \app\models\base\Position::find()->where(['id' => $item->positionId])->one()['name'] ?>,
-                    Ставка: <?= \app\models\base\Rate::find()->where(['id' => $item->rateId])->one()['name'] ?>,
-                    Занятость: <?= \app\models\base\Occupation::find()->where(['id' => $item->occupationId])->one()['name'] ?>.
+                    <?php
+                    if ($item->positionId) {
+                        echo 'Должность: '. \app\models\base\Position::find()->where(['id' => $item->positionId])->one()['name'];
+                    }
+                    if ($item->occupationId) {
+                        echo ', Ставка: '. \app\models\base\Occupation::find()->where(['id' => $item->occupationId])->one()['name'];
+                    }
+                    if ($item->rateId) {
+                        echo ', Размер ставки: '. \app\models\base\Rate::find()->where(['id' => $item->rateId])->one()['name'];
+                    }
+                    ?>
                     <?= Html::submitButton(
                         '<i class="fas fa-times"></i>',
                         [

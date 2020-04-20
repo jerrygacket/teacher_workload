@@ -50,13 +50,17 @@ class UsersController extends BaseController
 
         $model = new Users();
         if (\Yii::$app->request->isPost) {
+//            echo '<pre>';
+//            print_r(\Yii::$app->request->post());
+//            echo '<pre>';
+//            \Yii::$app->end(0);
             if ($model->load(\Yii::$app->request->post())) {
                 if (\Yii::$app->request->isAjax) {
                     \Yii::$app->response->format=Response::FORMAT_JSON;
                     return ActiveForm::validate($model);
                 }
                 $component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
-                if ($component->updateUser($model)) {
+                if ($component->createUser($model)) {
                     return $this->redirect('index');
                 } else {
                     print_r($model->errors);
@@ -77,11 +81,25 @@ class UsersController extends BaseController
         $component = \Yii::$app->users;
 
         $currentUser = $component->getModel(['id' => \Yii::$app->user->id]);
-        $provider = $component->getDataProvider(['departmentId' => $currentUser->departmentId ?? '']);
+        $roles = \Yii::$app->authManager->getRolesByUser($currentUser->id);
+        $isAdmin = array_key_exists('admin', $roles);
+        $params = [];
+        if (!$isAdmin) {
+            $params = ['active' => '1'];
+        }
 
-        return $this->render('index', ['provider'=>$provider]);
+        if ($currentUser->departmentId) {
+            $params['departmentId'] = $currentUser->departmentId;
+        }
+        $provider = $component->getDataProvider($params);
+
+        return $this->render('index', ['provider'=>$provider, 'admin' => $isAdmin]);
     }
 
+    /**
+     * @return array|string|Response
+     * @throws \yii\base\ExitException
+     */
     public function actionEdit() {
         $this->rbac = $this->getRbac();
         if (!$this->rbac->canCreateUser()) {
@@ -98,7 +116,7 @@ class UsersController extends BaseController
                     return ActiveForm::validate($model);
                 }
                 //$component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
-                if ($component->createUser($model)) {
+                if ($component->updateUser($model)) {
                     return $this->redirect('index');
                 } else {
                     print_r($model->errors);
@@ -108,6 +126,27 @@ class UsersController extends BaseController
         }
 
         return $this->render('edit', ['model' => $model]);
+    }
+
+    public function actionDelete($id) {
+        $this->rbac = $this->getRbac();
+        if (!$this->rbac->canCreateUser()) {
+            return $this->redirect('/auth/login');
+        }
+
+        $component = \Yii::$app->users;
+
+        $model = $component->getModel(['id' => $id]);
+//        print_r($model);
+//        \Yii::$app->end(0);
+        if ($model) {
+            if (!$component->deleteUser($model)) {
+                print_r($model->errors);
+                \Yii::$app->end(0);
+            }
+        }
+
+        return $this->redirect('index');
     }
 
     public function actionAddPosition() {

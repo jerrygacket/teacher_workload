@@ -28,25 +28,28 @@ echo $form->field($model,'userId')->hiddenInput()->label(false)
                 ]
             )->label(false)?>
         </div>
-        <div class="col-xl-2 col-12 text-md-center m-auto">
-            <?= $form->field($model,'rateId')->dropDownList(
-                \yii\helpers\ArrayHelper::map(
-                    $rates,'id','name'
-                ),
-                [
-                    'prompt' => 'Ставка...'
-                ]
-            )->label(false)?>
-        </div>
         <div class="col-xl-3 col-12 text-md-center m-auto">
             <?= $form->field($model,'occupationId')->dropDownList(
                 \yii\helpers\ArrayHelper::map(
                     $occupations,'id','name'
                 ),
                 [
-                    'prompt' => 'Занятость...'
+                    'prompt' => 'Ставка...',
+                    'onchange' => 'selectOccupation(this)'
                 ]
             )->label(false)?>
+        </div>
+        <div class="col-xl-2 col-12 text-md-center m-auto">
+            <div id="rateSelect">
+                <?= $form->field($model,'rateId')->dropDownList(
+                    \yii\helpers\ArrayHelper::map(
+                        $rates,'id','name'
+                    ),
+                    [
+                        'prompt' => 'Разммер ставки...'
+                    ]
+                )->label(false)?>
+            </div>
         </div>
         <div class="col-xl-3 col-12 text-md-center">
             <?= \yii\helpers\Html::submitButton('Добавить', ['class' => 'btn btn-sm blue-gradient w-100 ml-0']); ?>
