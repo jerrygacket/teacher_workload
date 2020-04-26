@@ -8,5 +8,5 @@
 
 <section class="mt-3">
     <h4 class="card-title">Редактировать пользователя</h4>
-    <?= $this->render('_form-create',['model' => $model]); ?>
+    <?= $this->render('_form-edit',['model' => $model]); ?>
 </section>

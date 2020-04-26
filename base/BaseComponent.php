@@ -3,8 +3,6 @@
 
 namespace app\base;
 
-
-use app\models\base\Users;
 use yii\base\Component;
 use yii\data\ActiveDataProvider;
 
@@ -43,9 +41,8 @@ class BaseComponent extends Component
     }
 
     public function getModel($params = []) {
-        $model = new $this->nameClass;
-
-        return empty($params['id']) ? $model : $model::findOne(['id'=>$params['id']]);
+        //$model = new $this->nameClass;
+        return (!empty($params) ?$this->nameClass::find()->andWhere($params)->one() : new $this->nameClass);
     }
 
     public function getDataFromFB($tableName) {

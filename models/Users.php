@@ -28,6 +28,24 @@ class Users extends \app\models\base\Users implements IdentityInterface
         return $this;
     }
 
+//    public function beforeSave($insert)
+//    {
+//        if (parent::beforeSave($insert)) {
+//            if($this->isNewRecord) {
+//                $this->created_on = date('Y-m-d H:i:s');
+//                $this->generateAuthKey();
+//                $this->setPassword($this->PasswordHash);
+//                $this->RulesAccept=1;
+//                return true;
+//            }
+//            else {
+//                $this->setPassword($this->PasswordHash);
+//                $this->updated_at = date('Y-m-d H:i:s');
+//                return true;
+//            }
+//        }
+//    }
+
     public function getUsername(){
         return $this->username;
     }

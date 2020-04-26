@@ -36,7 +36,7 @@ use yii\helpers\Html;
 
 <?php
 \yii\bootstrap4\NavBar::begin([
-    'brandLabel' => Yii::$app->name,
+    'brandLabel' => $this->params['h1'] ?? Yii::$app->name,
     'brandUrl' => Yii::$app->homeUrl,
     'options' => [
         'class' => 'navbar navbar-expand-lg navbar-dark blue-gradient',

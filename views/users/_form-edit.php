@@ -3,12 +3,12 @@
 
 
 /* @var $this \yii\web\View */
-/* @var $model \app\models\LoginForm|\app\models\Users|null|\yii\db\ActiveRecord */
+/* @var $model \app\models\Users */
 
 $form = \yii\bootstrap4\ActiveForm::begin([
-    'id' => 'user-create-form',
+    'id' => 'user-edit-form',
     'method' => 'POST',
-    'action' => Yii::$app->homeUrl.'users/create',
+    'action' => Yii::$app->homeUrl.'users/edit',
     'options' => ['class' => '']
 ]);
 echo $form->field($model,'id')->hiddenInput()->label(false);
@@ -23,13 +23,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 ->textInput(['required'=>true]);
             echo $form->field($model, 'password', ['enableClientValidation'=>false,
             'enableAjaxValidation'=>true])
-            ->passwordInput(['required'=>true, 'value' => $model->passwordHash]);
-        } elseif (empty($model->id)) {
-            //оставим так для упрощения заведения пользователей методистами. потом что-нибудь придумаем.
-            $model->username = \Yii::$app->security->generateRandomString(8);
-            $model->password = \Yii::$app->security->generateRandomString(8);
-            echo $form->field($model,'username')->hiddenInput()->label(false);
-            echo $form->field($model,'password')->hiddenInput()->label(false);
+            ->passwordInput([]);
         }
         ?>
         <?=$form->field($model, 'surname')->textInput(); ?>
@@ -51,13 +45,12 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
             <?php
         } else {
             $model->active = true;
-            echo $form->field($model,'active')->hiddenInput()->label(false);
+            echo $form->field($model,'active')->hiddenInput()->label(true);
         }
         ?>
         <div class="custom-control custom-checkbox">
             <?= $form->field($model, 'teacher', ['options' => ['tag' => false,]])
                 ->checkbox([
-                    'checked' => true,
                     'template' => '{input}{label}',
                     'class' => 'custom-control-input'
                 ], false)
@@ -66,7 +59,6 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
         <div class="custom-control custom-checkbox">
             <?= $form->field($model, 'top', ['options' => ['tag' => false,]])
                 ->checkbox([
-                    'checked' => false,
                     'template' => '{input}{label}',
                     'class' => 'custom-control-input'
                 ], false)
@@ -74,7 +66,6 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
         </div>
     </div>
     <div class="col-md-6 col-12">
-
         <?= $form->field($model,'departmentId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\Departments::find()
@@ -84,7 +75,6 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите кафедру...'
             ]
         ); ?>
-
         <?php
 //        if (Yii::$app->user->identity->username == 'admin') {
 //            echo $form->field($model,'departmentId')->dropDownList(

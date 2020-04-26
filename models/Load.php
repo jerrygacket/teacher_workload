@@ -9,6 +9,7 @@ use yii\base\Model;
 class Load extends Model
 {
     public $table = 'NAGR2016';
+    public $currentYear = '2019';
     public $hoursHeads = [
         'Lek_fact'=>'Лекции',
         'Lab_fact'=>'Лаб.раб.',
@@ -54,7 +55,7 @@ class Load extends Model
 //            $filters->department = $userModel::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
 //            //print_r($filters);
 //        }
-        $sql = 'select * from '.$this->table.' where CUR_YEAR='.(empty($filters->currentYear) ? date('Y') : $filters->currentYear);
+        $sql = 'select * from '.$this->table.' where CUR_YEAR='.(empty($filters->currentYear) ? $this->currentYear : $filters->currentYear);
         if (!empty($filters->institute)) {
             $sql .= ' and SHFAK=\''.$filters->institute.'\'';
         }
@@ -70,7 +71,8 @@ class Load extends Model
         $data = mb_check_encoding($data, 'UTF-8') ? $data : mb_convert_encoding($data, 'UTF-8', 'CP1251');
         $data = array_map(function ($value) {
             $groups = explode(',', $value['POTOK']);
-            $value['POTOK'] = (!empty($groups[0]) ? $groups[0].' - лек<br>':'').(!empty($groups[1]) ? $groups[1].' - сем<br>':'').(!empty($groups[2]) ? $groups[2].' - лаб.инд<br>':'');
+            $value['POTOK'] = (!empty($groups[0]) ? $groups[0].'-лек':'').PHP_EOL.(!empty($groups[1]) ? $groups[1].'-сем':'').PHP_EOL.(!empty($groups[2]) ? $groups[2].'-лаб.инд':'');
+            $value['POTOK'] = str_replace(PHP_EOL, '<br>', trim($value['POTOK']));
 
             return $value;
         }, $data);

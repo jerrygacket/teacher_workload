@@ -27,3 +27,7 @@ th.rotate > div {
     top: 10px;
     margin:auto;
 }
+
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: left;
+}

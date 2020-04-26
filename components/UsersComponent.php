@@ -32,7 +32,7 @@ class UsersComponent extends BaseComponent
 
         //$model->active = 1;
         if($model->save()){
-            $this->setPermissions($model);
+            //$this->setPermissions($model);
             $postVars = \Yii::$app->request->post();
             if (isset($postVars['posId']) && isset($postVars['occId']) && isset($postVars['rateId'])) {
                 foreach ($postVars['posId'] as $key => $posId) {
@@ -55,19 +55,15 @@ class UsersComponent extends BaseComponent
      * @return bool
      */
     public function updateUser(&$model):bool{
-        if ($model->newPassword != '') {
+        if ($model->newPassword != '' && $model->newPassword != $model->passwordHash) {
             $model->password = $model->newPassword;
             if ($model->validate('password')) {
                 $model->passwordHash=$this->hashPassword($model->password);
                 $model->auth_key=$this->generateAuthKey();
             }
         }
-        if($model->save()){
-            $this->setPermissions($model);
-            return true;
-        }
 
-        return false;
+        return $model->save();
     }
 
     /**

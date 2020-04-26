@@ -17,7 +17,7 @@ class FilterForm extends Model
         '2023' => '2023',
     ];
 
-    public $currentYear;
+    public $currentYear = '2019';
     public $institute;
     public $department;
     public $semester;

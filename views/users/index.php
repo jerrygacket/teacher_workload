@@ -11,19 +11,19 @@ use yii\helpers\Html; ?>
     'dataProvider' => $provider,
     'columns' => [
         'id:html',
-        $admin ? [
+        [
             'attribute' => 'username',
             'contentOptions' => [ 'style' => 'width: 6%;' ],
-        ] : null,
+        ],
         'surname:html',
         'name:html',
         'middleName:html',
         'teacher:html',
         'top:html',
-        $admin ? [
+        [
             'attribute' => 'active',
             'contentOptions' => [ 'style' => 'width: 6%;' ],
-        ] : null,
+        ],
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',

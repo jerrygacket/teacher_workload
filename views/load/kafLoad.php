@@ -4,8 +4,9 @@
  * @var $this \yii\web\View
  *  * @var $filterForm \app\models\FilterForm
  */
-
+$this->title = 'Общекафедральная нагрузка';
 $this->params['wide'] = true;
+$this->params['h1'] = $this->title;
 
 $hoursHeads = [
     'Lek_fact'=>'Лекции',
@@ -41,11 +42,25 @@ $heads = [
     'Wsego1'=>'Всего',
     'Prim'=>'Примечание',
 ];
-$this->title = 'Общекафедральная нагрузка';
-?>
-<h1>Общекафедральная нагрузка</h1>
 
-<?= $this->render('_filter-form',['filterForm' => $filterForm, 'action' => $action,]); ?>
+?>
+<!--<h1 style="font-size: 16px">Общекафедральная нагрузка</h1>-->
+
+<!-- Collapse buttons -->
+<div>
+    <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+        Фильтры
+    </a>
+</div>
+<!-- / Collapse buttons -->
+
+<!-- Collapsible element -->
+<div class="collapse" id="collapseFilter">
+    <div class="mt-3">
+        <?= $this->render('_filter-form',['filterForm' => $filterForm, 'action' => $action,]); ?>
+    </div>
+</div>
+<!-- / Collapsible element -->
 
 <div class="row">
     <div class="col-12">
@@ -53,9 +68,9 @@ $this->title = 'Общекафедральная нагрузка';
             <thead>
             <tr>
                 <?php
-                $verticals = ['kurs', 'stud', 'sem'];
+                //$verticals = ['kurs', 'stud', 'sem'];
                 foreach ($heads as $key => $value) {
-                    echo '<th class="th-sm ' .'"><div>'.$value .'</div></th>';
+                    echo '<th class="th-sm m-0">'.$value .'</th>';
                 }
                 ?>
             </tr>
@@ -69,13 +84,13 @@ $this->title = 'Общекафедральная нагрузка';
                         <?php
                         foreach ($heads as $key => $value) {
                             $upKey = strtoupper($key);
-                            echo '<td'.(is_numeric($item[$upKey]) ? ' class="text-center"' : '') .'>';
+                            echo '<td class="m-0 p-0'.(is_numeric($item[$upKey]) ? ' text-center' : '') .'">';
                             if (is_numeric($item[$upKey])) {
                                 $flt = floatval($item[$upKey]);
                                 echo  $flt == 0 ? '' : $flt;
                             } elseif ($key == 'Nazv1') {
                                 echo \yii\helpers\Html::button($item[$upKey], [
-                                    'class'=>'btn btn-link',
+                                    'class'=>'btn btn-link m-0 p-0 text-left',
                                     'data-toggle'=>'modal',
                                     'data-target'=>'#Modal'.$itemKey,
                                 ]);
@@ -95,11 +110,11 @@ $this->title = 'Общекафедральная нагрузка';
             <table id="totals" class="table table-striped table-bordered table-sm">
                 <thead>
                 <tr>
-                    <th class="th-sm">Период</th>
+                    <th class="th-sm m-0 p-0">Период</th>
                     <?php
                     foreach ($totals['Год'] as $key => $value) {
                         ?>
-                        <th class="th-sm"><?= $hoursHeads[$key] ?></th>
+                        <th class="th-sm m-0 p-0"><?= $hoursHeads[$key] ?></th>
                         <?php
                     }
                     ?>
@@ -111,9 +126,9 @@ $this->title = 'Общекафедральная нагрузка';
                     ?>
                     <tr>
                         <?php
-                        echo '<td>'.$period.'</td>';
+                        echo '<td class="m-0 p-0">'.$period.'</td>';
                         foreach ($item as $value) {
-                            echo '<td>'.round($value*100)/100..'</td>';
+                            echo '<td class="m-0 p-0">'.round($value*100)/100..'</td>';
                         }
                         ?>
                     </tr>

@@ -61,6 +61,7 @@ class UsersController extends BaseController
                 }
                 $component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
                 if ($component->createUser($model)) {
+                    $this->setPermissions($model);
                     return $this->redirect('index');
                 } else {
                     print_r($model->errors);
@@ -110,13 +111,17 @@ class UsersController extends BaseController
 
         $model = $component->getModel(\Yii::$app->request->queryParams);
         if (\Yii::$app->request->isPost) {
+            $model = $component->getModel(['id'=>\Yii::$app->request->post()['Users']['id']]);
             if ($model->load(\Yii::$app->request->post())) {
+//                print_r($model);
+//                \Yii::$app->end(0);
                 if (\Yii::$app->request->isAjax) {
                     \Yii::$app->response->format=Response::FORMAT_JSON;
                     return ActiveForm::validate($model);
                 }
                 //$component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
                 if ($component->updateUser($model)) {
+                    $this->setPermissions($model);
                     return $this->redirect('index');
                 } else {
                     print_r($model->errors);
@@ -182,5 +187,25 @@ class UsersController extends BaseController
         }
 
         return $this->redirect('/users');
+    }
+
+    /**
+     * @param $model
+     * @throws \Exception
+     * @var $authManager \yii\rbac\ManagerInterface
+     */
+    private function setPermissions($model) {
+        $authManager = $this->rbac->getAuthManager();
+        $userRoles = $authManager->getRolesByUser($model->id);
+        $authManager->revokeAll($model->id);
+        if ($model->teacher) {
+            $authManager->assign($authManager->getRole('teacher'),$model->id);
+        }
+        if ($model->top) {
+            $authManager->assign($authManager->getRole('top'),$model->id);
+        }
+        if (!$model->teacher && !$model->top) {
+            $authManager->assign($authManager->getRole('user'),$model->id);
+        }
     }
 }
