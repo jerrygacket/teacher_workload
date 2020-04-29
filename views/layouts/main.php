@@ -133,6 +133,8 @@ echo \yii\bootstrap4\Nav::widget([
 <script type="text/javascript" src="/js/addons/datatables.min.js"></script>
 <script type="text/javascript" src="/js/addons/datatables-select.min.js"></script>
 <script type="text/javascript" src="/js/tableSort.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/sender.js"></script>
 <script type="text/javascript" src="/js/actions.js"></script>
 
 </body>

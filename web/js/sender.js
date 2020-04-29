@@ -48,18 +48,22 @@ async function sendGETRequest(url, data = {}) {
 }
 
 async function sendPOSTRequest(url, data = {}) {
+    var param = $('meta[name="csrf-param"]').attr("content");
+    var token = $('meta[name="csrf-token"]').attr("content");
     var requestFields = {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({'data' : data, param : token})
     };
+    console.log(baseUri+url);
 
     let result = {};
     await fetch(baseUri+url, requestFields)
         .then((response) => {
+            console.log(response);
             if (response.status >= 200 && response.status < 300) {
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.indexOf("application/json") !== -1) {

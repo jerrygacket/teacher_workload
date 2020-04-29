@@ -121,7 +121,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите звание...'
             ]
         ); ?>
-        <?= $this->render('_positionFormJs',['userId' => $model->id]); ?>
+        <?= $this->render('_positionFormJs',['model' => $model, 'form' => true]); ?>
         <?php /* $form->field($model,'positionId')->dropDownList(
             \yii\helpers\ArrayHelper::map(
                 \app\models\base\Position::find()

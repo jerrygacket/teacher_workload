@@ -155,38 +155,35 @@ class UsersController extends BaseController
     }
 
     public function actionAddPosition() {
-        $this->rbac = $this->getRbac();
-        if (!$this->rbac->canCreateUser()) {
-            return $this->redirect('/auth/login');
+        $result = [
+            'error' => true,
+            'message' => 'Не работает. Вообще.'
+        ];
+        if (!empty(\Yii::$app->request->getQueryParams())) {
+            $allPositions = \yii\helpers\ArrayHelper::map(
+                \app\models\base\Position::find()->all(),'id','name'
+            );
+            $allOccupations = \yii\helpers\ArrayHelper::map(
+                \app\models\base\Occupation::find()->all(),'id','name'
+            );
+            $allRates = \yii\helpers\ArrayHelper::map(
+                \app\models\base\Rate::find()->all(),'id','name'
+            );
+            $item = \Yii::$app->request->getQueryParams();
+            $result = [
+                'result' =>  $this->renderPartial('_user-position',[
+                    'params' => $item,
+                    'position' => $allPositions[intval($item['posId'])] ?? 'Без должности',
+                    'occupation' => $allOccupations[intval($item['occId'])] ?? 'Нет',
+                    'rate' => $allRates[intval($item['rateId'])] ?? null,
+                    'key' => $item['id'],
+                    'form' => true,
+                ])
+            ];
         }
-        $model = new UserPositions();
-        if (\Yii::$app->request->isPost) {
-            if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect('view?id='.$model->userId);
-            }
-        }
+        //$done = intval(\Yii::$app->request->queryParams['done']);
 
-        return $this->redirect('/users');
-    }
-
-    public function actionDeletePosition() {
-        $this->rbac = $this->getRbac();
-        if (!$this->rbac->canCreateUser()) {
-            return $this->redirect('/auth/login');
-        }
-        $model = new UserPositions();
-        if (\Yii::$app->request->isPost) {
-            if ($model->load(\Yii::$app->request->post())) {
-                $userId = $model->userId;
-                $model::findOne(['id'=>\Yii::$app->request->post('UserPositions')])->delete();
-                //\Yii::$app->db->createCommand()->delete(UserPositions::tableName(), ['id' => $model->id])->execute();
-                //print_r();
-                //\Yii::$app->end(0);
-                return $this->redirect('view?id='.$userId);
-            }
-        }
-
-        return $this->redirect('/users');
+        $this->SendJsonResponse(array_merge($result, \Yii::$app->request->getQueryParams()));
     }
 
     /**
@@ -207,5 +204,14 @@ class UsersController extends BaseController
         if (!$model->teacher && !$model->top) {
             $authManager->assign($authManager->getRole('user'),$model->id);
         }
+    }
+
+    public function SendJsonResponse(array $response) {
+        \Yii::$app->response->format=Response::FORMAT_JSON;
+        $object = (object) $response;
+        \Yii::$app->response->data = $object;
+        \Yii::$app->response->send();
+
+        \Yii::$app->end(0);
     }
 }

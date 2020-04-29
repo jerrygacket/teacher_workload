@@ -33,17 +33,7 @@ class UsersComponent extends BaseComponent
         //$model->active = 1;
         if($model->save()){
             //$this->setPermissions($model);
-            $postVars = \Yii::$app->request->post();
-            if (isset($postVars['posId']) && isset($postVars['occId']) && isset($postVars['rateId'])) {
-                foreach ($postVars['posId'] as $key => $posId) {
-                    $userPosition = new UserPositions();
-                    $userPosition->userId = $model->id;
-                    $userPosition->occupationId = intval($postVars['occId'][$key]);
-                    $userPosition->positionId = intval($posId);
-                    $userPosition->rateId = intval($postVars['rateId'][$key]);
-                    $userPosition->save();
-                }
-            }
+            $model->setPositions(\Yii::$app->request->post());
             return true;
         }
 
@@ -63,7 +53,12 @@ class UsersComponent extends BaseComponent
             }
         }
 
-        return $model->save();
+        if($model->save()){
+            $model->setPositions(\Yii::$app->request->post());
+            return true;
+        }
+
+        return false;
     }
 
     /**

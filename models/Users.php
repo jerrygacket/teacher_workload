@@ -135,6 +135,20 @@ class Users extends \app\models\base\Users implements IdentityInterface
 //        return [];
     }
 
+    public function setPositions($params) {
+        UserPositions::deleteAll(['userId' => $this->id]);
+        if (isset($params['posId']) && isset($params['occId']) && isset($params['rateId'])) {
+            foreach ($params['posId'] as $key => $posId) {
+                $userPosition = new UserPositions();
+                $userPosition->userId = $this->id;
+                $userPosition->occupationId = intval($params['occId'][$key]);
+                $userPosition->positionId = intval($posId);
+                $userPosition->rateId = intval($params['rateId'][$key]);
+                $userPosition->save();
+            }
+        }
+    }
+
     public function getInstitute()
     {
         $department = $this->getDepartment()->one();

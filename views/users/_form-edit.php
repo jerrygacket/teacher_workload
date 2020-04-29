@@ -111,39 +111,7 @@ echo $form->field($model,'id')->hiddenInput()->label(false);
                 'prompt' => 'Выберите звание...'
             ]
         ); ?>
-        <?= $this->render('_positionFormJs',['userId' => $model->id]); ?>
-        <?php /* $form->field($model,'positionId')->dropDownList(
-            \yii\helpers\ArrayHelper::map(
-                \app\models\base\Position::find()
-                    ->all(),'id','name'
-            ),
-            [
-                'prompt' => 'Выберите должность...'
-            ]
-        );?>
-        <?= $form->field($model,'rateId')->dropDownList(
-            \yii\helpers\ArrayHelper::map(
-                \app\models\base\Rate::find()
-                    ->all(),'id','name'
-            ),
-            [
-                'prompt' => 'Выберите ставку...'
-            ]
-        ); ?>
-        <?= $form->field($model,'occupationId')->dropDownList(
-            \yii\helpers\ArrayHelper::map(
-                \app\models\base\Occupation::find()
-                    ->all(),'id','name'
-            ),
-            [
-                'prompt' => 'Выберите занятость...'
-            ]
-        ); */?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-
+        <?= $this->render('_positionFormJs',['model' => $model, 'form' => true]); ?>
     </div>
 </div>
     <div class="form-group">

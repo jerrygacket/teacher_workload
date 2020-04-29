@@ -1,24 +1,37 @@
 <?php
-/* @var $this \yii\web\View */
 /**
- * @var $userId integer
+ * Список должностей пользователя и форма для добавления должности
  */
-$positions = \app\models\base\Position::find()->all();
-$occupations = \app\models\base\Occupation::find()->all();
-$rates = \app\models\base\Rate::find()->all();
-$model = new \app\models\base\UserPositions();
+/* @var $this \yii\web\View */
+$allPositions = \yii\helpers\ArrayHelper::map(
+    \app\models\base\Position::find()->all(),'id','name'
+);
+$allOccupations = \yii\helpers\ArrayHelper::map(
+    \app\models\base\Occupation::find()->all(),'id','name'
+);
+$allRates = \yii\helpers\ArrayHelper::map(
+    \app\models\base\Rate::find()->all(),'id','name'
+);
 ?>
 <div class="card">
     <div class="card-body">
-        <ul id="positions">
-
+        <ul class="list-group list-group-flush mb-1" id="positions">
+            <?php
+            echo $this->render('_user-positions',[
+                'userPositions' => $model->getPositions(),
+                'allPositions' => $allPositions,
+                'allOccupations' => $allOccupations,
+                'allRates' => $allRates,
+                'form' => (isset($form) && $form)]);
+            ?>
         </ul>
+        <?php
+        if (isset($form) && $form) {
+        ?>
         <div class="row">
             <div class="col-12 mb-3">
                 <?= \yii\helpers\Html::dropDownList('position',null,
-                    \yii\helpers\ArrayHelper::map(
-                        $positions,'id','name'
-                    ),
+                    $allPositions,
                     [
                         'id' => 'position',
                         'prompt' => 'Должность...',
@@ -27,9 +40,7 @@ $model = new \app\models\base\UserPositions();
             </div>
             <div class="col-12 mb-3">
                 <?=  \yii\helpers\Html::dropDownList('occupation',null,
-                    \yii\helpers\ArrayHelper::map(
-                        $occupations,'id','name'
-                    ),
+                    $allOccupations,
                     [
                         'id' => 'occupation',
                         'prompt' => 'Ставка...',
@@ -40,9 +51,7 @@ $model = new \app\models\base\UserPositions();
             </div>
             <div class="col-12 mb-3" id="rateSelect">
                 <?=  \yii\helpers\Html::dropDownList('rate',null,
-                    \yii\helpers\ArrayHelper::map(
-                        $rates,'id','name'
-                    ),
+                    $allRates,
                     [
                         'id' => 'rate',
                         'prompt' => 'Разммер ставки...',
@@ -60,5 +69,8 @@ $model = new \app\models\base\UserPositions();
                 ); ?>
             </div>
         </div>
+        <?php
+        }
+        ?>
     </div>
 </div>
