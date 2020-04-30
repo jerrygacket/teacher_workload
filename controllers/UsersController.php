@@ -59,11 +59,12 @@ class UsersController extends BaseController
                     \Yii::$app->response->format=Response::FORMAT_JSON;
                     return ActiveForm::validate($model);
                 }
-                $component = \Yii::createObject(['class' => AuthComponent::class, 'nameClass' => Users::class]);
+                $component = \Yii::$app->users;
                 if ($component->createUser($model)) {
                     $this->setPermissions($model);
                     return $this->redirect('index');
                 } else {
+                    $model->addError('no error');
                     print_r($model->errors);
                     \Yii::$app->end(0);
                 }
