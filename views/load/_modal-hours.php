@@ -27,6 +27,9 @@
                     </div>
                     <div class="col-6"><?php
                         foreach ($hoursHeads as $key => $value) {
+                            if (empty($item[strtoupper($key)])) {
+                                continue;
+                            }
                             $flt = floatval($item[strtoupper($key)]);
                             if ($flt != 0) {
                                 echo '<p>';

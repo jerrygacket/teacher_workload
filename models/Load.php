@@ -4,28 +4,51 @@
 namespace app\models;
 
 
+use app\traits\FunHelper;
 use yii\base\Model;
 
 class Load extends Model
 {
+    use FunHelper;
     public $table = 'NAGR2016';
     public $currentYear = '2019';
     public $hoursHeads = [
-        'Lek_fact'=>'Лекции',
-        'Lab_fact'=>'Лаб.раб.',
-        'Sem_fact'=>'Семинары',
-        'Norma'=>'КП,КР,РГР',
-        'Ind_fact'=>'Индив.раб.',
-        'Pract_fact'=>'Практики',
-        'kons'=>'Консульт.',
+        'LEK_FACT'=>'Лекции',
+        'LAB_FACT'=>'Лаб.раб.',
+        'SEM_FACT'=>'Семинары',
+        'NORMA'=>'КП,КР,РГР',
+        'IND_FACT'=>'Индив.раб.',
+        'PRACT_FACT'=>'Практики',
+        'KONS'=>'Консульт.',
         'KZR'=>'К.р. реценз.',
         'KZS'=>'К.р. собесед.',
-        'Ekz_fact'=>'Экзамен',
-        'Zach_fact'=>'Зачет',
-        'Dipl_fact'=>'Дипл.проект',
-        'Gos_Ekz_fact'=>'Гос.экзамен',
-        'Proch'=>'Прочее',
-        'Wsego1'=>'Всего',
+        'EKZ_FACT'=>'Экзамен',
+        'ZACH_FACT'=>'Зачет',
+        'DIPL_FACT'=>'Дипл.проект',
+        'GOS_EKZ_FACT'=>'Гос.экзамен',
+        'PROCH'=>'Прочее',
+        'WSEGO1'=>'Всего',
+        'K1'=>'Руководство КП',
+        'K2'=>'Защита КП',
+        'K3'=>'Руководство КР',
+        'K4'=>'Защита КР',
+        'K5'=>'РГР',
+    ];
+    /**
+     * Типы занятий, часы которых необходимо делить по подгруппам
+     * @var array
+     */
+    public $halfHours = [
+        'LAB_FACT'=>'Лаб.раб.',
+        'IND_FACT'=>'Индив.раб.',
+        'KONS'=>'Консульт.',
+        'ZACH_FACT'=>'Зачет',
+        'K1'=>'Руководство КП',
+        'K2'=>'Защита КП',
+        'K3'=>'Руководство КР',
+        'K4'=>'Защита КР',
+        'K5'=>'РГР',
+        'NORMA'=>'КП,КР,РГР',
     ];
     public $heads = [
         'sem'=>'Семестр',
@@ -110,28 +133,83 @@ class Load extends Model
         return $result;
     }
 
+    /**
+     * Собираем строки для формы индивидуальной нагрузки
+     * если поле "P_GR">1, то размножаем каждый вид работы на количество подгрупп, в поле "Индекс группы"
+     * ставим крестики "х" - признак номера подгруппы, часы по данному виду работы делим поровну на несколько подгрупп.
+     * @param $commonLoad
+     * @return array
+     */
     public function getKafLoad($commonLoad){
         $result = [];
         foreach ($commonLoad as $item) {
             $lessons = $this->getLessons($item);
             $info = $this->getSubjectInfo($item);
+
             foreach ($lessons as $key => $lesson) {
-                $result[] = array_merge($info, [$key => $lesson]);
+                if ($key != 'WSEGO1') {
+                    $i = 0;
+                    $groupIndex = $info['N_GROUP1'];
+                    $splitHours = array_key_exists($key, $this->halfHours);
+                    while ($i < $info['P_GR']) {
+                        if (($info['P_GR'] > 1) && $splitHours) {
+                            $groupIndex .= 'x';
+                        }
+                        $tmp = array_merge($info, [
+                            //'ID' => $this->genUuid(),
+                            'N_GROUP1' => $groupIndex,
+                            //$key => $lesson/$info['P_GR'],
+                            'HOURS' => ($splitHours) ? $lesson/$info['P_GR'] : $lesson,
+                            'TYPE' => $this->hoursHeads[$key]
+                        ]);
+                        $tmp['LOAD_ID'] = implode('', $tmp);
+                        if (empty(KafLoad::find()->where(['LOAD_ID' => $tmp['LOAD_ID']])->one())) {
+                            $kafLoad = new KafLoad();
+                            $kafLoad->load($tmp, '');
+                            if (!$kafLoad->save()) {
+                                echo '<pre>';
+                                print_r($kafLoad->errors);
+                                echo '</pre>';
+                            }
+                            $tmp['NEW_LINE'] =true;
+                        }
+                        $result[] = $tmp;//json_decode(json_encode($tmp), FALSE);
+                        if (!$splitHours) {
+                            break;
+                        }
+                        $i++;
+                    }
+                }
+
+//                if (array_key_exists($key, $this->halfHours)) {
+//
+//                } elseif ($key != 'WSEGO1') {
+//                    $tmp = array_merge($info, [
+////                        'ID' => $this->genUuid(),
+//                        'HOURS' => $lesson,
+//                        'TYPE' => $this->hoursHeads[$key]]);
+//                    $tmp['LOAD_ID'] = implode('', $tmp);
+//                    $result[] = $tmp;//json_decode(json_encode($tmp), FALSE);
+//                }
             }
-            echo '<pre>';
-            print_r($result);
-            echo '</pre>';
-            \Yii::$app->end(0);
         }
 
-        return [];
+//        foreach ($result as $item) {
+//            if (empty(KafLoad::find()->where([])))
+//        }
+//        echo '<pre>';
+//        print_r($commonLoad);
+//        echo '</pre>';
+        \Yii::$app->end(0);
+
+        return $result;
     }
 
     public function getLessons($subject) {
         $result = [];
-        foreach ($this->hoursHeads as $key => $value) {
-            $upKey = strtoupper($key);
-            if (is_numeric($subject[$upKey]) && ($val = floatval($subject[$upKey]))) {
+        $val = 0;
+        foreach ($this->hoursHeads as $upKey => $value) {
+            if (is_numeric($subject[$upKey]) && ($val = floatval($subject[$upKey])) && $val > 0) {
                 $result[$upKey] = $val;
             }
         }

@@ -7,52 +7,71 @@
 $this->params['wide'] = true;
 
 $hoursHeads = [
-    'Lek_fact'=>'Лекции',
-    'Lab_fact'=>'Лаб.раб.',
-    'Sem_fact'=>'Семинары',
-    'Norma'=>'КП,КР,РГР',
-    'Ind_fact'=>'Индив.раб.',
-    'Pract_fact'=>'Практики',
-    'kons'=>'Консульт.',
+    'LEK_FACT'=>'Лекции',
+    'LAB_FACT'=>'Лаб.раб.',
+    'SEM_FACT'=>'Семинары',
+    'NORMA'=>'КП,КР,РГР',
+    'IND_FACT'=>'Индив.раб.',
+    'PRACT_FACT'=>'Практики',
+    'KONS'=>'Консульт.',
     'KZR'=>'К.р. реценз.',
     'KZS'=>'К.р. собесед.',
-    'Ekz_fact'=>'Экзамен',
-    'Zach_fact'=>'Зачет',
-    'Dipl_fact'=>'Дипл.проект',
-    'Gos_Ekz_fact'=>'Гос.экзамен',
-    'Proch'=>'Прочее',
-    'Wsego1'=>'Всего',
+    'EKZ_FACT'=>'Экзамен',
+    'ZACH_FACT'=>'Зачет',
+    'DIPL_FACT'=>'Дипл.проект',
+    'GOS_EKZ_FACT'=>'Гос.экзамен',
+    'PROCH'=>'Прочее',
+    'WSEGO1'=>'Всего',
+    'K1'=>'Руководство КП',
+    'K2'=>'Защита КП',
+    'K3'=>'Руководство КР',
+    'K4'=>'Защита КР',
+    'K5'=>'РГР',
 ];
 
 $heads = [
-    'sem'=>'Семестр',
-    'Index_d'=>'Код дисциплины',
-    'Nazv1'=>'Наименование дисциплины',
-    'shfak'=>'Факультет',
-    'shkaf'=>'Кафедра',
-    'kurs'=>'Курс',
-    'stud'=>'Кол. студентов',
-    'npot'=>'Потоков',
-    'k_gr'=>'Групп',
-    'P_gr'=>'Подгрупп',
-    'N_group1'=>'Индекс группы',
-    'Potok'=>'Поток с',
-    'Wsego1'=>'Всего',
-    'Prim'=>'Примечание',
+    'SEM'=>'Семестр',
+    'SHFAK'=>'Факультет',
+    'KURS'=>'Курс',
+    //'INDEX_D'=>'Код дисциплины',
+    'STUD'=>'Кол. студентов',
+    'N_GROUP1'=>'Индекс группы',
+    'POTOK'=>'Поток с',
+    'HOURS'=>'Часы',
+    'TYPE'=>'Тип',
+    'NAZV1'=>'Наименование дисциплины',
+    'FIO'=>'Преподаватель',
+
 ];
-$this->title = 'Общекафедральная нагрузка';
+$this->title = 'Распределение нагрузки';
+$selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
 ?>
 <h1>Распределение нагрузки для преподавателей кафедры <?=$filterForm->department?></h1>
-<?= $this->render('_filter-form',[
-    'filterForm' => $filterForm,
-    'action' => $action,
-    'fields' => [
-        'currentYear' => '1',
-        'semester' => '1'
-    ],
-]); ?>
+<!-- Collapse buttons -->
+<div>
+    <a class="btn btn-outline-primary btn-sm" data-toggle="collapse" href="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+        Фильтры
+    </a>
+</div>
+<!-- / Collapse buttons -->
+
+<!-- Collapsible element -->
+<div class="collapse" id="collapseFilter">
+    <div class="mt-3">
+        <?= $this->render('_filter-form',[
+            'filterForm' => $filterForm,
+            'action' => $action,
+            'fields' => [
+                'currentYear' => '1',
+                'semester' => '1'
+            ],
+        ]); ?>
+    </div>
+</div>
+<!-- / Collapsible element -->
+
 <div class="row">
-    <div class="col-12">
+    <div class="col-10">
         <table id="commonLoad" class="table table-striped table-bordered table-sm">
             <thead>
             <tr>
@@ -67,26 +86,32 @@ $this->title = 'Общекафедральная нагрузка';
             <?php
             if (!empty($data)) {
                 foreach ($data as $itemKey => $item) {
-                    foreach ($heads as $key => $value) {
-                            echo '<tr>';
-                            $upKey = strtoupper($key);
-                            echo '<td'.(is_numeric($item[$upKey]) ? ' class="text-center"' : '') .'>';
-                            if (is_numeric($item[$upKey])) {
-                                $flt = floatval($item[$upKey]);
-                                echo  $flt == 0 ? '' : $flt;
-                            } elseif ($key == 'Nazv1') {
-                                echo \yii\helpers\Html::button($item[$upKey], [
-                                    'class'=>'btn btn-link',
-                                    'data-toggle'=>'modal',
-                                    'data-target'=>'#Modal'.$itemKey,
-                                ]);
-                                echo $this->render('_modal-hours',['item' => $item, 'hoursHeads' => $hoursHeads, 'modalId' => 'Modal'.$itemKey]);
-                            } else {
-                                echo $item[$upKey];
+                    echo '<tr>';
+                    foreach ($heads as $upKey => $value) {
+                        if (empty($item[$upKey])) {
+                            echo '<td>';
+                            if ($upKey == 'FIO') {
+                                echo \yii\helpers\Html::dropDownList('teacher', null,
+                                    $selectUsers,
+                                    [
+                                        'id' => 'teacher'.$itemKey,
+                                        'prompt' => '',
+                                    ]
+                                );
                             }
                             echo '</td>';
-
+                            continue;
+                        }
+                        echo '<td'.(is_numeric($item[$upKey] ?? '') ? ' class="text-center"' : '') .'>';
+                        if (is_numeric($item[$upKey])) {
+                            $flt = floatval($item[$upKey]);
+                            echo  $flt == 0 ? '' : $flt;
+                        } else {
+                            echo $item[$upKey];
+                        }
+                        echo '</td>';
                     }
+                    echo '</tr>';
                     ?>
                 <?php }
             }?>
@@ -123,7 +148,30 @@ $this->title = 'Общекафедральная нагрузка';
             </table>
         <?php } ?>
     </div>
+    <div class="col-2">
+        <?php if (!empty($users)) { ?>
+            <table id="users" class="table table-striped table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th class="th-sm">Ф.И.О</th>
+                    <th class="th-sm">часы</th>
+                    <th class="th-sm">ставка</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($users as $user) {
+                    ?>
+                    <tr>
+                        <?php
+                        echo '<td>'.$user['fio'].'<div class="text-small">'.$user['position'].'</div></td>';
+                        echo '<td></td>';
+                        echo '<td>'.$user['rate'].'</td>';
+                        ?>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        <?php } ?>
+    </div>
 </div>
-<pre>
-    <?php print_r($data); ?>
-</pre>

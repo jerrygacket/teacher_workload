@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\models\base\Position;
+use app\models\base\Rate;
 use app\models\base\UserPositions;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -154,5 +156,28 @@ class Users extends \app\models\base\Users implements IdentityInterface
         $department = $this->getDepartment()->one();
 
         return Institutes::find()->where(['SHFAK' => $department['SHFAK']])->asArray()->one();
+    }
+
+    /**
+     * @param $departmentId
+     * @var $users Users[]
+     * @var $positions Position[]
+     */
+    public static function getTeachers($departmentId) {
+        $result = [];
+        $users = self::find()->where(['departmentId' => $departmentId, 'active' => 1, 'teacher' => 1])->all();
+        foreach ($users as $user) {
+            $positions = $user->getPositions();
+            foreach ($positions as $position) {
+                $result[] = [
+                    'id' => $user->id,
+                    'fio' => implode(' ', [$user->surname, $user->name,$user->middleName]),
+                    'position' => Position::find()->where(['id'=>$position->positionId])->one()['name'],
+                    'rate' => Rate::find()->where(['id'=>$position->rateId])->one()['name'],
+                ];
+            }
+        }
+
+        return $result;
     }
 }

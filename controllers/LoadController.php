@@ -90,16 +90,17 @@ class LoadController extends BaseController
         $filterForm->department = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
 
         $data = $model->getKafLoad($model->getCommonLoad($filterForm));
-//        $totals = [
-//            '1 семестр' => $model->getTotals($data, 1),
-//            '2 семестр' => $model->getTotals($data, 2),
-//            'Год' => $model->getTotals($data),
-//        ];
+        $users = Users::getTeachers(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        \Yii::$app->end(0);
 
         return $this->render('calc', [
             'filterForm' => $filterForm,
             'action' => 'calc',
             'data' => $data,
+            'users' => $users,
 //            'totals' => $totals,
         ]);
     }
