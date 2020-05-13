@@ -10,6 +10,8 @@ use app\models\FilterForm;
 use app\models\Institutes;
 use app\models\Load;
 use app\models\Users;
+use Yii;
+use yii\web\Response;
 
 class LoadController extends BaseController
 {
@@ -89,19 +91,49 @@ class LoadController extends BaseController
         $model = new Load();
         $filterForm->department = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
 
-        $data = $model->getKafLoad($model->getCommonLoad($filterForm));
+//        echo '<pre>';
+//        print_r($model->getCommonLoad($filterForm));
+//        echo '</pre>';
+//        \Yii::$app->end(0);
+
+//        $data = $model->updateKafLoad($model->getCommonLoad($filterForm));
+        $data = $model->getSavedKafLoad($filterForm->department);
         $users = Users::getTeachers(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        \Yii::$app->end(0);
 
         return $this->render('calc', [
             'filterForm' => $filterForm,
             'action' => 'calc',
             'data' => $data,
+            'newData' => $model->newLine,
             'users' => $users,
 //            'totals' => $totals,
         ]);
+    }
+
+    public function actionHours() {
+        if (Yii::$app->user->isGuest) {
+            $result = [
+                'error' => true,
+                'message' => 'Нужно выполнить вход в систему еще раз.'
+            ];
+            $this->SendJsonResponse($result);
+        }
+
+        $result = [
+            'error' => true,
+            'message' => 'Не работает. Вообще.'.print_r(Yii::$app->request->queryParams, true)
+        ];
+
+
+        $this->SendJsonResponse($result);
+    }
+
+    public function SendJsonResponse(array $response) {
+        Yii::$app->response->format=Response::FORMAT_JSON;
+        $object = (object) $response;
+        Yii::$app->response->data = $object;
+        Yii::$app->response->send();
+
+        Yii::$app->end(0);
     }
 }

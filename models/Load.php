@@ -6,10 +6,11 @@ namespace app\models;
 
 use app\traits\FunHelper;
 use yii\base\Model;
+use yii\db\Query;
 
 class Load extends Model
 {
-    use FunHelper;
+    use FunHelper; // getUuid function
     public $table = 'NAGR2016';
     public $currentYear = '2019';
     public $hoursHeads = [
@@ -66,6 +67,8 @@ class Load extends Model
         'Wsego1'=>'Всего',
         'Prim'=>'Примечание',
     ];
+
+    public $newLine = false;
 
     /**
      * @param $filters FilterForm
@@ -133,14 +136,128 @@ class Load extends Model
         return $result;
     }
 
+    public function checkData($newItem, $oldItem) {
+        return array_udiff($newItem, $oldItem, array($this, 'customCompare'));
+    }
+
+    public function customCompare($newItem, $oldItem) {
+        if (is_array($newItem)) $a = $newItem['date'];
+        else $a = $newItem;
+        if (is_array($oldItem)) $b = $oldItem['date'];
+        else $b = $oldItem;
+        if ($a == $b) {
+            return 0;
+        } elseif ($a > $b) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
     /**
      * Собираем строки для формы индивидуальной нагрузки
      * если поле "P_GR">1, то размножаем каждый вид работы на количество подгрупп, в поле "Индекс группы"
      * ставим крестики "х" - признак номера подгруппы, часы по данному виду работы делим поровну на несколько подгрупп.
-     * @param $commonLoad
+     * @param $commonLoad //вся нагрузка на кафедру. массив из предметов с часами занятий, инфой и  описанием.
+     * @var $lessons //отдельные занятия с количеством часов по предмету (лекции, лаб, экз и т.д.)
+     * @var $info //инфо по предмету занятия (группа, курс, число студентов)
      * @return array
      */
-    public function getKafLoad($commonLoad){
+    public function updateKafLoad($commonLoad) {
+        $sourceKafLoad = $this->getSourceLoads($commonLoad);
+
+//        $query = new Query();
+//        $sql = 'INSERT IGNORE INTO '
+//            .KafLoad::tableName()
+//            .' ('.implode(',', array_keys(current($sourceKafLoad))) .') '
+//            .'VALUES (1,2) (3,4) (5,6) ON DUPLICATE KEY UPDATE '.KafLoad::tableName().'.LOAD_ID = VALUES(LOAD_ID) ;'
+//        $query->createCommand()->setRawSql()
+        //$query->createCommand()->(KafLoad::tableName(), array_keys(current($sourceKafLoad)), $sourceKafLoad);
+        // INSERT IGNORE INTO tablename (field1, field2) VALUES (1,2) (3,4) (5,6) ON DUPLICATE KEY UPDATE tablename.field1 = VALUES(field1) ;
+
+
+        /*
+         * $old_sql = array(
+   array( 'id'=>1, 'name'=>'a', 'price'=>10.0 ),
+   array( 'id'=>2, 'name'=>'b', 'price'=>20.0 ),
+   array( 'id'=>3, 'name'=>'c', 'price'=>30.0 ),
+);
+
+$new_sql = array(
+   array( 'id'=>1, 'name'=>'a', 'price'=>10.0 ),
+   array( 'id'=>3, 'name'=>'c', 'price'=>35.0 ),
+   array( 'id'=>4, 'name'=>'d', 'price'=>15.0 ),
+);
+
+
+
+$new_records = array_udiff($new_sql, $old_sql, 'cmp_id');
+$deleted_records = array_udiff($old_sql, $new_sql, 'cmp_id');
+$changed_records = array_uintersect($new_sql, $old_sql, 'cmp_price' );
+
+
+
+echo "<pre>";
+
+echo "New records\n";
+print_r($new_records);
+
+echo "\n\nDeleted records\n";
+print_r($deleted_records);
+
+echo "\n\nChanged records\n";
+print_r($changed_records);
+
+echo "</pre>";
+
+
+
+function cmp_id( $a, $b ){
+   return $b['id']-$a['id'];
+}
+
+function cmp_price( $a, $b ){
+   if( $a['id']==$b['id'] ){
+      if( $a['price']!=$b['price'] ) return 0;
+      return 1;
+   }
+   return $b['id']-$a['id'];
+}
+         */
+
+        foreach ($sourceKafLoad as &$sourceItem) {
+            if (empty($kafLoad = KafLoad::find()->where(['LOAD_ID' => $sourceItem['LOAD_ID']])->one())) {
+                $kafLoad = new KafLoad();
+                $sourceItem['NEW_LINE'] = true;
+                $this->newLine = true;
+                $kafLoad->load($sourceItem, '');
+            }
+            if (count(array_diff_assoc($kafLoad->toArray(),$sourceItem)) > 3) {
+                echo 'new line';
+                \Yii::$app->end(0);
+            }
+//            echo '<pre>';
+//            print_r($kafLoad->toArray());
+//            print_r($sourceItem);
+//            print_r(array_diff_assoc($kafLoad->toArray(),$sourceItem));
+//            echo '</pre>';
+//            \Yii::$app->end(0);
+            if (!$kafLoad->save()) {
+                echo '<pre>';
+                print_r($kafLoad->errors);
+                echo '</pre>';
+            }
+        }
+
+        return $sourceKafLoad;
+    }
+
+    /**
+     * @param $commonLoad
+     * @return array
+     * // формируем массив занятий с часами из исходной базы firebird
+     */
+    public function getSourceLoads($commonLoad) {
         $result = [];
         foreach ($commonLoad as $item) {
             $lessons = $this->getLessons($item);
@@ -160,49 +277,27 @@ class Load extends Model
                             'N_GROUP1' => $groupIndex,
                             //$key => $lesson/$info['P_GR'],
                             'HOURS' => ($splitHours) ? $lesson/$info['P_GR'] : $lesson,
-                            'TYPE' => $this->hoursHeads[$key]
+                            'TYPE' => $this->hoursHeads[$key],
                         ]);
                         $tmp['LOAD_ID'] = implode('', $tmp);
-                        if (empty(KafLoad::find()->where(['LOAD_ID' => $tmp['LOAD_ID']])->one())) {
-                            $kafLoad = new KafLoad();
-                            $kafLoad->load($tmp, '');
-                            if (!$kafLoad->save()) {
-                                echo '<pre>';
-                                print_r($kafLoad->errors);
-                                echo '</pre>';
-                            }
-                            $tmp['NEW_LINE'] =true;
-                        }
-                        $result[] = $tmp;//json_decode(json_encode($tmp), FALSE);
+                        $tmp['WSEGO1'] = $lessons['WSEGO1'];
+                        $result[$tmp['LOAD_ID']] = $tmp;
                         if (!$splitHours) {
                             break;
                         }
                         $i++;
                     }
                 }
-
-//                if (array_key_exists($key, $this->halfHours)) {
-//
-//                } elseif ($key != 'WSEGO1') {
-//                    $tmp = array_merge($info, [
-////                        'ID' => $this->genUuid(),
-//                        'HOURS' => $lesson,
-//                        'TYPE' => $this->hoursHeads[$key]]);
-//                    $tmp['LOAD_ID'] = implode('', $tmp);
-//                    $result[] = $tmp;//json_decode(json_encode($tmp), FALSE);
-//                }
             }
         }
 
-//        foreach ($result as $item) {
-//            if (empty(KafLoad::find()->where([])))
-//        }
-//        echo '<pre>';
-//        print_r($commonLoad);
-//        echo '</pre>';
-        \Yii::$app->end(0);
-
         return $result;
+    }
+
+    public function getSavedKafLoad($userDepartment) {
+        //$userDepartment = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
+        // уже имеющийся массив занятий с распределенными часами
+        return KafLoad::find()->where(['SHKAF' => $userDepartment])->asArray()->all();
     }
 
     public function getLessons($subject) {

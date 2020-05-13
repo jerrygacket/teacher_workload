@@ -71,7 +71,12 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
 <!-- / Collapsible element -->
 
 <div class="row">
-    <div class="col-10">
+    <div class="col-md-10 col-12">
+        <?php if ($newData) {?>
+            <div class="alert alert-danger" role="alert">
+                Изменилась нагрузка кафедры. Есть нераспределенные часы
+            </div>
+        <?php } ?>
         <table id="commonLoad" class="table table-striped table-bordered table-sm">
             <thead>
             <tr>
@@ -86,16 +91,20 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
             <?php
             if (!empty($data)) {
                 foreach ($data as $itemKey => $item) {
-                    echo '<tr>';
+                    $newLine = array_key_exists('NEW_LINE', $item);
+                    echo '<tr'.($newLine ? ' class="text-danger"' : '').'>';
                     foreach ($heads as $upKey => $value) {
                         if (empty($item[$upKey])) {
                             echo '<td>';
                             if ($upKey == 'FIO') {
-                                echo \yii\helpers\Html::dropDownList('teacher', null,
+                                echo \yii\helpers\Html::dropDownList('teacher', 5,
                                     $selectUsers,
                                     [
                                         'id' => 'teacher'.$itemKey,
-                                        'prompt' => '',
+                                        'prompt' => 'Не назначено',
+                                        'data-load_id' => $item['LOAD_ID'],
+                                        'data-hours' => $item['HOURS'],
+                                        'onchange' => 'calcHours(this)',
                                     ]
                                 );
                             }
@@ -148,7 +157,7 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
             </table>
         <?php } ?>
     </div>
-    <div class="col-2">
+    <div class="col-md-2 col-12">
         <?php if (!empty($users)) { ?>
             <table id="users" class="table table-striped table-bordered table-sm">
                 <thead>

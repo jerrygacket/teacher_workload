@@ -1,15 +1,3 @@
-// async function getChartList(chartSet) {
-//     let data = {"chartSet": chartSet, "list": "1"};
-//     await sendRequest('index.php', data, 'GET')
-//         .then((response) =>  {
-//             if (response.error) {
-//                 alert(response.message);
-//             }  else {
-//                 response.result.forEach((item) => getChart(chartSet, item));
-//             }
-//         })
-//         .catch((error) => console.log(error));
-// }
 async function addPosition(elem) {
     let data = {};
     let positions = document.getElementById('positions');
@@ -77,4 +65,26 @@ function selectOccupation(elem) {
     }
     document.getElementById('rate').value = '';
     //document.getElementById('rate').text = 'Разммер ставки...';
+}
+
+async function calcHours(elem) {
+    //alert(elem.dataset.load_id);
+    let data = {
+        "load_id": elem.dataset.load_id,
+        "hours": elem.dataset.hours,
+        "user_id": elem.value
+    };
+
+
+    await sendRequest('/load/hours', data, 'GET')
+        .then((response) =>  {
+            if (response.error) {
+                alert(response.message);
+                console.log(response);
+            }  else {
+                //setPosition(response.result);
+                alert(response.result);
+            }
+        })
+        .catch((error) => console.log(error));
 }
