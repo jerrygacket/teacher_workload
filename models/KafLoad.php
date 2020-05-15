@@ -24,6 +24,37 @@ class KafLoad extends \app\models\base\KafLoad
         ];
     }
 
+    public function setUserId($userId) {
+        $this->USER_ID = $userId;
+    }
+
+    public function setPositionID($positionId) {
+        $this->POSITION_ID = $positionId;
+    }
+
+    public function getUserHours($userId = null) {
+        if (!$this->USER_ID && !$userId) {
+            return false;
+        }
+
+        $result = 0;
+        foreach ($this::findAll(['USER_ID' => $userId ?? $this->USER_ID]) as $item) {
+            $result += $item->HOURS;
+        }
+
+        return $result;
+    }
+
+    public static function getAllUsersHours($userIds) {
+        $result = [];
+        foreach (self::find()->where(['USER_ID' => $userIds])->asArray()->all() as $item) {
+            $key = $item['USER_ID'].'_'.$item['POSITION_ID'];
+            $result[$key] = ($result[$key] ?? 0) + $item['HOURS'];
+        }
+
+        return $result;
+    }
+
 //    /**
 //     * {@inheritdoc}
 //     */

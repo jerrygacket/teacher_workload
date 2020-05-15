@@ -8,6 +8,7 @@ use app\base\BaseController;
 use app\models\Departments;
 use app\models\FilterForm;
 use app\models\Institutes;
+use app\models\KafLoad;
 use app\models\Load;
 use app\models\Users;
 use Yii;
@@ -91,14 +92,16 @@ class LoadController extends BaseController
         $model = new Load();
         $filterForm->department = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
 
-//        echo '<pre>';
-//        print_r($model->getCommonLoad($filterForm));
-//        echo '</pre>';
-//        \Yii::$app->end(0);
+
 
 //        $data = $model->updateKafLoad($model->getCommonLoad($filterForm));
         $data = $model->getSavedKafLoad($filterForm->department);
         $users = Users::getTeachers(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
+
+//        echo '<pre>';
+//        print_r($data);
+//        echo '</pre>';
+//        \Yii::$app->end(0);
 
         return $this->render('calc', [
             'filterForm' => $filterForm,
@@ -106,6 +109,7 @@ class LoadController extends BaseController
             'data' => $data,
             'newData' => $model->newLine,
             'users' => $users,
+            'usersHours' => KafLoad::getAllUsersHours(\yii\helpers\ArrayHelper::map($users,'id','id')),
 //            'totals' => $totals,
         ]);
     }
@@ -119,9 +123,53 @@ class LoadController extends BaseController
             $this->SendJsonResponse($result);
         }
 
+        if (!isset(Yii::$app->request->queryParams['load_id'])) {
+            $result = [
+                'error' => true,
+                'message' => 'Не указан предмет, заняте и часы.'
+            ];
+            $this->SendJsonResponse($result);
+        }
+        if (!isset(Yii::$app->request->queryParams['position_id'])) {
+            $result = [
+                'error' => true,
+                'message' => 'Не указаны часы.'
+            ];
+            $this->SendJsonResponse($result);
+        }
+        if (!isset(Yii::$app->request->queryParams['user_id'])) {
+            $result = [
+                'error' => true,
+                'message' => 'Не указан преподаватель.'
+            ];
+            $this->SendJsonResponse($result);
+        }
+
+        $load = KafLoad::findOne(['LOAD_ID' => Yii::$app->request->queryParams['load_id']]);
+        if (empty($load)) {
+            $result = [
+                'error' => true,
+                'message' => 'Не найдена нагрузка.'
+            ];
+            $this->SendJsonResponse($result);
+        }
+        $load->setUserId(Yii::$app->request->queryParams['user_id']);
+        $load->setPositionId(Yii::$app->request->queryParams['position_id']);
+
+        if (!$load->save()) {
+            $result = [
+                'error' => true,
+                'message' => 'Не сохранились часы. '.print_r($load->errors),
+            ];
+            $this->SendJsonResponse($result);
+        }
+
+        $users = Users::getTeachersIds(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
         $result = [
-            'error' => true,
-            'message' => 'Не работает. Вообще.'.print_r(Yii::$app->request->queryParams, true)
+            'error' => false,
+            'result' => [
+                'hours' => KafLoad::getAllUsersHours($users),
+            ]
         ];
 
 

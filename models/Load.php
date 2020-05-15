@@ -297,7 +297,7 @@ function cmp_price( $a, $b ){
     public function getSavedKafLoad($userDepartment) {
         //$userDepartment = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
         // уже имеющийся массив занятий с распределенными часами
-        return KafLoad::find()->where(['SHKAF' => $userDepartment])->asArray()->all();
+        return KafLoad::findAll(['SHKAF' => $userDepartment]);
     }
 
     public function getLessons($subject) {

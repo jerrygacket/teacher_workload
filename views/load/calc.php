@@ -44,7 +44,13 @@ $heads = [
 
 ];
 $this->title = 'Распределение нагрузки';
-$selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
+//$selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
+$selectUsers = [];
+foreach ($users as $item) {
+    $selectUsers[$item['id'].'_'.$item['positionId']] = $item['fio'].' '.$item['position'];
+}
+//$positions = \yii\helpers\ArrayHelper::map($users, 'position','fio', 'id');
+//print_r($positions);
 ?>
 <h1>Распределение нагрузки для преподавателей кафедры <?=$filterForm->department?></h1>
 <!-- Collapse buttons -->
@@ -77,12 +83,12 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
                 Изменилась нагрузка кафедры. Есть нераспределенные часы
             </div>
         <?php } ?>
-        <table id="commonLoad" class="table table-striped table-bordered table-sm">
+        <table id="departmentLoad" class="table table-striped table-bordered table-sm">
             <thead>
             <tr>
                 <?php
                 foreach ($heads as $key => $value) {
-                    echo '<th class="th-sm"><div>'.$value .'</div></th>';
+                    echo '<th class="th-sm"'.($key == 'NAZV1' ? 'style="width:16%"' : '').'><div>'.$value .'</div></th>';
                 }
                 ?>
             </tr>
@@ -97,13 +103,18 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
                         if (empty($item[$upKey])) {
                             echo '<td>';
                             if ($upKey == 'FIO') {
-                                echo \yii\helpers\Html::dropDownList('teacher', 5,
+                                echo \yii\helpers\Html::dropDownList(
+                                    'teacher_select_'.$itemKey,
+                                    ($item['POSITION_ID'] && $item['USER_ID'])
+                                        ? $item['USER_ID'].'_'.$item['POSITION_ID']
+                                        : null,
                                     $selectUsers,
                                     [
-                                        'id' => 'teacher'.$itemKey,
+                                        'id' => 'teacher_select_'.$itemKey,
                                         'prompt' => 'Не назначено',
                                         'data-load_id' => $item['LOAD_ID'],
-                                        'data-hours' => $item['HOURS'],
+                                        'data-elem_id' => $itemKey,
+                                        //'data-position' => $item['POSITION_ID'],
                                         'onchange' => 'calcHours(this)',
                                     ]
                                 );
@@ -174,7 +185,7 @@ $selectUsers = \yii\helpers\ArrayHelper::map($users,'id','fio');
                     <tr>
                         <?php
                         echo '<td>'.$user['fio'].'<div class="text-small">'.$user['position'].'</div></td>';
-                        echo '<td></td>';
+                        echo '<td id="teacher_hours_'.$user['id'].'_'.$user['positionId'].'">'.($usersHours[$user['id'].'_'.$user['positionId']] ?? '').'</td>';
                         echo '<td>'.$user['rate'].'</td>';
                         ?>
                     </tr>

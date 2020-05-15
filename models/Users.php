@@ -165,7 +165,7 @@ class Users extends \app\models\base\Users implements IdentityInterface
      */
     public static function getTeachers($departmentId) {
         $result = [];
-        $users = self::find()->where(['departmentId' => $departmentId, 'active' => 1, 'teacher' => 1])->all();
+        $users = self::findAll(['departmentId' => $departmentId, 'active' => 1, 'teacher' => 1]);
         foreach ($users as $user) {
             $positions = $user->getPositions();
             foreach ($positions as $position) {
@@ -173,11 +173,18 @@ class Users extends \app\models\base\Users implements IdentityInterface
                     'id' => $user->id,
                     'fio' => implode(' ', [$user->surname, $user->name,$user->middleName]),
                     'position' => Position::find()->where(['id'=>$position->positionId])->one()['name'],
+                    'positionId' => $position->positionId,
                     'rate' => Rate::find()->where(['id'=>$position->rateId])->one()['name'],
+                    'rateId' => $position->rateId
                 ];
             }
         }
 
         return $result;
+    }
+
+    public static function getTeachersIds($departmentId) {
+        $users = self::findAll(['departmentId' => $departmentId, 'active' => 1, 'teacher' => 1]);
+        return \yii\helpers\ArrayHelper::map($users,'id','id');
     }
 }

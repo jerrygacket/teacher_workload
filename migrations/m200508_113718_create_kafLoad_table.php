@@ -15,6 +15,8 @@ class m200508_113718_create_kafLoad_table extends Migration
         $this->createTable('{{%kafLoad}}', [
                 'ID' => $this->primaryKey(),
                 'LOAD_ID' => $this->string(1024),
+                'USER_ID' => $this->integer(5)->null(),
+                'POSITION_ID' => $this->integer(5)->null(),
                 'SEM' => $this->integer(3),
                 'INDEX_D' => $this->string(256),
                 'NAZV1' => $this->string(256),

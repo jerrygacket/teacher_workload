@@ -69,10 +69,12 @@ function selectOccupation(elem) {
 
 async function calcHours(elem) {
     //alert(elem.dataset.load_id);
+    let id_pos = elem.value.split("_");
     let data = {
         "load_id": elem.dataset.load_id,
-        "hours": elem.dataset.hours,
-        "user_id": elem.value
+        //"hours": elem.dataset.hours,
+        "user_id": id_pos[0],
+        "position_id": id_pos[1]
     };
 
 
@@ -82,9 +84,23 @@ async function calcHours(elem) {
                 alert(response.message);
                 console.log(response);
             }  else {
-                //setPosition(response.result);
-                alert(response.result);
+                setTeacherHours(response.result);
+                //console.log(response.result);
             }
         })
         .catch((error) => console.log(error));
+}
+
+function setTeacherHours(data) {
+    //alert(data.hours);
+    //console.log(document.getElementById('teacher_hours_' + data.user_id));
+    //console.log(data.hours);
+    for (let [key, value] of Object.entries(data.hours)) {
+        document.getElementById('teacher_hours_' + key).innerHTML = value;
+    }
+    //data.hours.forEach(printHours);
+}
+
+function printHours(element, index, array) {
+    document.getElementById('teacher_hours_' + index).innerHTML = element;
 }

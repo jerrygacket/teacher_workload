@@ -9,6 +9,8 @@ use Yii;
  *
  * @property int $ID
  * @property string|null $LOAD_ID
+ * @property int|null $USER_ID
+ * @property int|null $POSITION_ID
  * @property int|null $SEM
  * @property string|null $INDEX_D
  * @property string|null $NAZV1
@@ -44,7 +46,7 @@ class KafLoad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['SEM', 'KURS', 'STUD', 'NPOT', 'K_GR', 'P_GR'], 'integer'],
+            [['USER_ID', 'POSITION_ID', 'SEM', 'KURS', 'STUD', 'NPOT', 'K_GR', 'P_GR'], 'integer'],
             [['WSEGO1', 'HOURS'], 'number'],
             [['created_on', 'updated_on'], 'safe'],
             [['LOAD_ID'], 'string', 'max' => 1024],
@@ -61,6 +63,8 @@ class KafLoad extends \yii\db\ActiveRecord
         return [
             'ID' => Yii::t('app', 'ID'),
             'LOAD_ID' => Yii::t('app', 'Load ID'),
+            'USER_ID' => Yii::t('app', 'User ID'),
+            'POSITION_ID' => Yii::t('app', 'Position ID'),
             'SEM' => Yii::t('app', 'Sem'),
             'INDEX_D' => Yii::t('app', 'Index D'),
             'NAZV1' => Yii::t('app', 'Nazv1'),
