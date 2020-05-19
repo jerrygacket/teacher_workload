@@ -95,11 +95,11 @@ class LoadController extends BaseController
 
 
 //        $data = $model->updateKafLoad($model->getCommonLoad($filterForm));
-        $data = $model->getSavedKafLoad($filterForm->department);
+        $data = $model->getSavedKafLoad($filterForm);
         $users = Users::getTeachers(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
 
 //        echo '<pre>';
-//        print_r($data);
+//        print_r($filterForm);
 //        echo '</pre>';
 //        \Yii::$app->end(0);
 

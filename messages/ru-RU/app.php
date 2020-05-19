@@ -40,4 +40,5 @@ return [
     'Institute' => 'Институт',
     'Department' => 'Кафедра',
     'Current year' => 'Текущий год',
+    'Empty User' => 'Только не распределенные часы',
 ];

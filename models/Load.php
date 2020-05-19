@@ -294,10 +294,20 @@ function cmp_price( $a, $b ){
         return $result;
     }
 
-    public function getSavedKafLoad($userDepartment) {
-        //$userDepartment = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
+    /**
+     * @param $filterForm FilterForm
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getSavedKafLoad($filterForm) {
         // уже имеющийся массив занятий с распределенными часами
-        return KafLoad::findAll(['SHKAF' => $userDepartment]);
+        $query = KafLoad::find();
+        $query->where(['SHKAF' => $filterForm->department]);
+        if ($filterForm->emptyUser == '1') {
+            $query->andWhere(['USER_ID' => null]);
+        }
+        $query->andFilterWhere(['USER_ID' => $filterForm->teacher]);
+
+        return $query->all();
     }
 
     public function getLessons($subject) {

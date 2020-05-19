@@ -8,7 +8,7 @@ use app\models\Departments;
 use app\models\Institutes;
 
 $form = \yii\widgets\ActiveForm::begin([
-    'id' => 'login-form',
+    'id' => 'filter-form',
     'options' => [
         'class' => 'form-horizontal',
         'action'=>'/load/'.$action,
@@ -52,6 +52,21 @@ if (!isset($fields) || isset($fields['semester'])) {
     echo $form->field($filterForm, 'semester')->dropDownList(
         ['1' => '1', '2' => '2'],
         ['prompt' => 'Не выбран...']
+    );
+    echo '</div>';
+}
+if (isset($fields) && isset($fields['emptyUser'])) {
+    echo '<div class="col-md-2 col-12">';
+    echo $form->field($filterForm, 'emptyUser')->checkbox([ 'value' => '1']);
+    echo '</div>';
+}
+if (isset($fields) && isset($fields['teacher'])) {
+    echo '<div class="col-md-2 col-12">';
+    echo $form->field($filterForm, 'teacher')->dropDownList(
+        \yii\helpers\ArrayHelper::map($users, 'id', 'fio'),
+        [
+            'prompt' => 'Не выбран...',
+        ]
     );
     echo '</div>';
 }

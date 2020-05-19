@@ -66,10 +66,13 @@ foreach ($users as $item) {
     <div class="mt-3">
         <?= $this->render('_filter-form',[
             'filterForm' => $filterForm,
+            'users' => $users,
             'action' => $action,
             'fields' => [
                 'currentYear' => '1',
-                'semester' => '1'
+                'semester' => '1',
+                'emptyUser' => '1',
+                'teacher' => '1'
             ],
         ]); ?>
     </div>

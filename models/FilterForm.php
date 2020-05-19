@@ -21,6 +21,8 @@ class FilterForm extends Model
     public $institute;
     public $department;
     public $semester;
+    public $emptyUser;
+    public $teacher;
 
     public function rules()
     {
@@ -29,6 +31,8 @@ class FilterForm extends Model
             ['department', 'trim'],
             ['currentYear', 'trim'],
             ['semester', 'trim'],
+            ['emptyUser', 'trim'],
+            ['teacher', 'trim'],
         ]);
     }
 
@@ -42,6 +46,8 @@ class FilterForm extends Model
             'department' => \Yii::t('app', 'Department'),
             'currentYear' => \Yii::t('app', 'Current year'),
             'semester' => \Yii::t('app', 'Semester'),
+            'emptyUser' => \Yii::t('app', 'Empty User'),
+            'teacher' => \Yii::t('app', 'Teacher'),
         ];
     }
 }
