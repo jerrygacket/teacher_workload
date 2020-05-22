@@ -50,6 +50,8 @@ class Load extends Model
         'K4'=>'Защита КР',
         'K5'=>'РГР',
         'NORMA'=>'КП,КР,РГР',
+        'DIPL_FACT'=>'Дипл.проект',
+        'GOS_EKZ_FACT'=>'Гос.экзамен',
     ];
     public $heads = [
         'sem'=>'Семестр',
@@ -232,10 +234,10 @@ function cmp_price( $a, $b ){
                 $this->newLine = true;
                 $kafLoad->load($sourceItem, '');
             }
-            if (count(array_diff_assoc($kafLoad->toArray(),$sourceItem)) > 3) {
-                echo 'new line';
-                \Yii::$app->end(0);
-            }
+//            if (count(array_diff_assoc($kafLoad->toArray(),$sourceItem)) > 3) {
+//                echo 'new line';
+//                \Yii::$app->end(0);
+//            }
 //            echo '<pre>';
 //            print_r($kafLoad->toArray());
 //            print_r($sourceItem);
@@ -263,20 +265,36 @@ function cmp_price( $a, $b ){
             $lessons = $this->getLessons($item);
             $info = $this->getSubjectInfo($item);
 
+//            if (substr_count($item['NAZV1'], 'ГАК') > 0) {
+//                echo '<pre>';
+//                print_r($info);
+//                echo '</pre>';
+//                \Yii::$app->end(0);
+//            }
             foreach ($lessons as $key => $lesson) {
                 if ($key != 'WSEGO1') {
                     $i = 0;
                     $groupIndex = $info['N_GROUP1'];
                     $splitHours = array_key_exists($key, $this->halfHours);
-                    while ($i < $info['P_GR']) {
-                        if (($info['P_GR'] > 1) && $splitHours) {
+                    // если нет подгруп, то это слен ГАК/ГЭК или серкетарь или председатель
+                    $subGroups = ($info['P_GR'] ?? 1);
+                    // разбиваем по формуле: кол членов = общее число часов / (кол.студентов * 0,5)
+                    if (substr_count($item['NAZV1'], 'Член Г') > 0) {
+                        $subGroups = $lesson/($info['STUD'] * 0.5);
+//                        echo '<pre>';
+//                        print_r($subGroups);
+//                        echo '</pre>';
+//                        \Yii::$app->end(0);
+                    }
+                    while ($i < $subGroups) {
+                        if (($subGroups > 1) && $splitHours) {
                             $groupIndex .= 'x';
                         }
                         $tmp = array_merge($info, [
                             //'ID' => $this->genUuid(),
                             'N_GROUP1' => $groupIndex,
                             //$key => $lesson/$info['P_GR'],
-                            'HOURS' => ($splitHours) ? $lesson/$info['P_GR'] : $lesson,
+                            'HOURS' => ($splitHours) ? $lesson/$subGroups : $lesson,
                             'TYPE' => $this->hoursHeads[$key],
                         ]);
                         $tmp['LOAD_ID'] = implode('', $tmp);
@@ -287,6 +305,12 @@ function cmp_price( $a, $b ){
                         }
                         $i++;
                     }
+//                    if ($key == 'DIPL_FACT') {
+//                        echo '<pre>';
+//                        print_r($result[$tmp['LOAD_ID']]);
+//                        echo '</pre>';
+//                        \Yii::$app->end(0);
+//                    }
                 }
             }
         }
@@ -312,7 +336,7 @@ function cmp_price( $a, $b ){
 
     public function getLessons($subject) {
         $result = [];
-        $val = 0;
+        //$val = 0;
         foreach ($this->hoursHeads as $upKey => $value) {
             if (is_numeric($subject[$upKey]) && ($val = floatval($subject[$upKey])) && $val > 0) {
                 $result[$upKey] = $val;

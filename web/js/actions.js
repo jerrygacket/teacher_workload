@@ -73,8 +73,8 @@ async function calcHours(elem) {
     let data = {
         "load_id": elem.dataset.load_id,
         //"hours": elem.dataset.hours,
-        "user_id": id_pos[0],
-        "position_id": id_pos[1]
+        "user_id": id_pos[0] ? id_pos[0] : 0,
+        "position_id": id_pos[1] ? id_pos[1] : 0
     };
 
 
@@ -85,7 +85,7 @@ async function calcHours(elem) {
                 console.log(response);
             }  else {
                 setTeacherHours(response.result);
-                //console.log(response.result);
+                console.log(response.result);
             }
         })
         .catch((error) => console.log(error));
@@ -95,6 +95,8 @@ function setTeacherHours(data) {
     //alert(data.hours);
     //console.log(document.getElementById('teacher_hours_' + data.user_id));
     //console.log(data.hours);
+    // let key = data.user_id + data.position_id;
+    // document.getElementById('teacher_hours_' + key).innerHTML = data.hours;
     for (let [key, value] of Object.entries(data.hours)) {
         document.getElementById('teacher_hours_' + key).innerHTML = value;
     }

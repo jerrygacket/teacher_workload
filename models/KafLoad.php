@@ -32,13 +32,16 @@ class KafLoad extends \app\models\base\KafLoad
         $this->POSITION_ID = $positionId;
     }
 
-    public function getUserHours($userId = null) {
-        if (!$this->USER_ID && !$userId) {
-            return false;
+    public function getUserHours() {
+        if (!$this->USER_ID || $this->USER_ID == 0) {
+            return 0;
         }
 
         $result = 0;
-        foreach ($this::findAll(['USER_ID' => $userId ?? $this->USER_ID]) as $item) {
+        foreach ($this::findAll([
+            'USER_ID' => $this->USER_ID,
+            'POSITION_ID' => $this->POSITION_ID
+        ]) as $item) {
             $result += $item->HOURS;
         }
 
@@ -47,6 +50,12 @@ class KafLoad extends \app\models\base\KafLoad
 
     public static function getAllUsersHours($userIds) {
         $result = [];
+//        foreach ($userIds as $userId) {
+//            foreach (self::find()->where(['USER_ID' => $userIds])->asArray()->all() as $item) {
+//                $key = $item['USER_ID'].'_'.$item['POSITION_ID'];
+//                $result[$key] = ($result[$key] ?? 0) + $item['HOURS'];
+//            }
+//        }
         foreach (self::find()->where(['USER_ID' => $userIds])->asArray()->all() as $item) {
             $key = $item['USER_ID'].'_'.$item['POSITION_ID'];
             $result[$key] = ($result[$key] ?? 0) + $item['HOURS'];

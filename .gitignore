@@ -32,5 +32,5 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 
-/config/db_local.php
-/config/fb_connect_local.php
+config/db_local.php
+config/fb_connect_local.php

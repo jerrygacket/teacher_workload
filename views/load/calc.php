@@ -68,6 +68,7 @@ foreach ($users as $item) {
             'filterForm' => $filterForm,
             'users' => $users,
             'action' => $action,
+            'method' => 'post',
             'fields' => [
                 'currentYear' => '1',
                 'semester' => '1',
@@ -108,7 +109,7 @@ foreach ($users as $item) {
                             if ($upKey == 'FIO') {
                                 echo \yii\helpers\Html::dropDownList(
                                     'teacher_select_'.$itemKey,
-                                    ($item['POSITION_ID'] && $item['USER_ID'])
+                                    (($item['POSITION_ID'] ?? null) && $item['USER_ID'])
                                         ? $item['USER_ID'].'_'.$item['POSITION_ID']
                                         : null,
                                     $selectUsers,
@@ -144,11 +145,11 @@ foreach ($users as $item) {
             <table id="totals" class="table table-striped table-bordered table-sm">
                 <thead>
                 <tr>
-                    <th class="th-sm">Период</th>
+                    <th class="th-sm m-0 p-0">Период</th>
                     <?php
                     foreach ($totals['Год'] as $key => $value) {
                         ?>
-                        <th class="th-sm"><?= $hoursHeads[$key] ?></th>
+                        <th class="th-sm m-0 p-0"><?= $hoursHeads[strtoupper($key)] ?></th>
                         <?php
                     }
                     ?>
@@ -160,9 +161,9 @@ foreach ($users as $item) {
                     ?>
                     <tr>
                         <?php
-                        echo '<td>'.$period.'</td>';
+                        echo '<td class="m-0 p-0">'.$period.'</td>';
                         foreach ($item as $value) {
-                            echo '<td>'.round($value*100)/100..'</td>';
+                            echo '<td class="m-0 p-0">'.round($value*100)/100..'</td>';
                         }
                         ?>
                     </tr>

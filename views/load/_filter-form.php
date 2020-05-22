@@ -9,11 +9,12 @@ use app\models\Institutes;
 
 $form = \yii\widgets\ActiveForm::begin([
     'id' => 'filter-form',
+    'method' => $method ?? 'post',
     'options' => [
         'class' => 'form-horizontal',
         'action'=>'/load/'.$action,
-        'method' => 'post',
-        'enctype' => 'multipart/form-data'
+
+        //'enctype' => 'multipart/form-data'
     ],
 ]);
 echo '<hr>';

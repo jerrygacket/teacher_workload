@@ -85,18 +85,29 @@ class LoadController extends BaseController
 
         $filterForm = new FilterForm();
         $filterForm->currentYear = '2019'; //date('Y');
+//        $filterForm->load(\Yii::$app->request->get());
         if ( \Yii::$app->request->isPost) {
             $filterForm->load(\Yii::$app->request->post());
         }
 
         $model = new Load();
-        $filterForm->department = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'];
+        $filterForm->department = Users::findOne(['id' => \Yii::$app->user->id])->getDepartment()->one()['SHKAF'] ?? 'ИТиС';
 
+//        echo '<pre>';
+//        print_r($filterForm);
+//        echo '</pre>';
+//        \Yii::$app->end(0);
 
-
-//        $data = $model->updateKafLoad($model->getCommonLoad($filterForm));
+        $data = $model->updateKafLoad($model->getCommonLoad($filterForm));
         $data = $model->getSavedKafLoad($filterForm);
         $users = Users::getTeachers(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
+
+        $data2 = $model->getCommonLoad($filterForm);
+        $totals = [
+            '1 семестр' => $model->getTotals($data2, 1),
+            '2 семестр' => $model->getTotals($data2, 2),
+            'Год' => $model->getTotals($data2),
+        ];
 
 //        echo '<pre>';
 //        print_r($filterForm);
@@ -110,7 +121,7 @@ class LoadController extends BaseController
             'newData' => $model->newLine,
             'users' => $users,
             'usersHours' => KafLoad::getAllUsersHours(\yii\helpers\ArrayHelper::map($users,'id','id')),
-//            'totals' => $totals,
+            'totals' => $totals,
         ]);
     }
 
@@ -164,11 +175,12 @@ class LoadController extends BaseController
             $this->SendJsonResponse($result);
         }
 
-        $users = Users::getTeachersIds(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
+        //$users = Users::getTeachersIds(Users::findOne(['id' => \Yii::$app->user->id])->departmentId);
+
         $result = [
             'error' => false,
             'result' => [
-                'hours' => KafLoad::getAllUsersHours($users),
+                'hours' => KafLoad::getAllUsersHours(),
             ]
         ];
 
